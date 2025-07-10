@@ -1,0 +1,55 @@
+
+import { Progress } from "@/components/ui/progress";
+
+interface ProgressBarProps {
+  currentStep: number;
+  totalSteps: number;
+  stepTitle: string;
+}
+
+const ProgressBar = ({ currentStep, totalSteps, stepTitle }: ProgressBarProps) => {
+  const progress = (currentStep / totalSteps) * 100;
+
+  return (
+    <div className="w-full bg-white shadow-sm border-b border-border py-4 px-6">
+      <div className="container mx-auto">
+        <div className="flex items-center justify-between mb-3">
+          <div>
+            <h2 className="text-lg font-semibold text-foreground">
+              المرحلة {currentStep} من {totalSteps}
+            </h2>
+            <p className="text-sm text-muted-foreground">{stepTitle}</p>
+          </div>
+          <div className="text-sm font-medium text-primary">
+            {Math.round(progress)}% مكتمل
+          </div>
+        </div>
+        
+        <Progress 
+          value={progress} 
+          className="h-3 bg-muted"
+        />
+        
+        {/* Step indicators */}
+        <div className="flex justify-between mt-3">
+          {Array.from({ length: totalSteps }, (_, index) => (
+            <div
+              key={index}
+              className={`flex items-center justify-center w-8 h-8 rounded-full text-xs font-medium transition-all ${
+                index + 1 <= currentStep
+                  ? "bg-primary text-white"
+                  : index + 1 === currentStep + 1
+                  ? "bg-primary/20 text-primary border-2 border-primary"
+                  : "bg-muted text-muted-foreground"
+              }`}
+            >
+              {index + 1}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProgressBar;
