@@ -9,6 +9,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 
+interface PackageType {
+  name: string;
+  price: number;
+  duration: string;
+  features: string[];
+  popular?: boolean;
+}
+
 const ServiceRequest = () => {
   const [selectedPackage, setSelectedPackage] = useState("standard");
   const [files, setFiles] = useState<File[]>([]);
@@ -34,7 +42,7 @@ const ServiceRequest = () => {
           "مراجعة واحدة مجانية",
           "تسليم بصيغة PDF"
         ]
-      },
+      } as PackageType,
       standard: {
         name: "الباقة المتوسطة",
         price: 1200,
@@ -48,7 +56,7 @@ const ServiceRequest = () => {
           "ملخص تنفيذي"
         ],
         popular: true
-      },
+      } as PackageType,
       premium: {
         name: "الباقة المتقدمة",
         price: 1800,
@@ -63,7 +71,7 @@ const ServiceRequest = () => {
           "عرض تقديمي",
           "دعم بعد التسليم لمدة شهر"
         ]
-      }
+      } as PackageType
     }
   };
 

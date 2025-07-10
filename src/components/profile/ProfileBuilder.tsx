@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { CheckCircle, User, Languages, FileText, Briefcase, Award, MessageSquare, CreditCard } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,9 +13,83 @@ import AchievementsStep from "./steps/AchievementsStep";
 import BiographyStep from "./steps/BiographyStep";
 import PaymentStep from "./steps/PaymentStep";
 
+export interface ProfileData {
+  // Basic Info
+  identityId: string;
+  identityImage?: File;
+  nationality: string;
+  gender: "male" | "female";
+  birthDate: string;
+  country: string;
+  city: string;
+  educationLevel: string;
+  specialization: string;
+  experienceYears?: number;
+
+  // Languages
+  languages: Array<{
+    language: string;
+    level: string;
+    isPrimary: boolean;
+  }>;
+
+  // Documents
+  documents: Array<{
+    type: string;
+    name: string;
+    issueDate: Date;
+    file?: File;
+  }>;
+
+  // Services
+  services: Array<{
+    serviceType: string;
+    customService?: string;
+    category: string;
+    description: string;
+  }>;
+
+  // Achievements
+  achievements: Array<{
+    name: string;
+    completionDate: Date;
+    description: string;
+    organization: string;
+    attachments: File[];
+  }>;
+
+  // Biography
+  biography: string;
+  profileImage?: File;
+  socialLinks: Array<{
+    platform: string;
+    url: string;
+  }>;
+
+  // Payment
+  paymentInfo?: {
+    cardName: string;
+    cardNumber: string;
+    cvv: string;
+    expiryMonth: string;
+    expiryYear: string;
+  };
+}
+
 const ProfileBuilder = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+
+  const form = useForm<ProfileData>({
+    defaultValues: {
+      languages: [],
+      documents: [],
+      services: [],
+      achievements: [],
+      socialLinks: [],
+      biography: "",
+    }
+  });
 
   const steps = [
     { id: 1, name: "المعلومات الأساسية", icon: User, component: BasicInfoStep },
@@ -176,7 +251,7 @@ const ProfileBuilder = () => {
 
                 {/* Step Component */}
                 <div className="mb-8">
-                  {CurrentStepComponent && <CurrentStepComponent />}
+                  {CurrentStepComponent && <CurrentStepComponent form={form} />}
                 </div>
 
                 {/* Navigation Buttons */}
