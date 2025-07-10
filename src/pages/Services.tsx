@@ -1,5 +1,5 @@
-
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Search, Filter, BookOpen, FileText, GraduationCap, Briefcase, Star, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -86,6 +86,47 @@ const mockServices = [
 const Services = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [sortBy, setSortBy] = useState("newest");
+  const [filteredServices, setFilteredServices] = useState(mockServices);
+
+  // Filter and search functionality
+  const handleSearch = () => {
+    let filtered = mockServices;
+    
+    // Filter by category
+    if (selectedCategory !== "all") {
+      filtered = filtered.filter(service => service.category === selectedCategory);
+    }
+    
+    // Filter by search query
+    if (searchQuery.trim()) {
+      filtered = filtered.filter(service => 
+        service.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        service.description.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+    
+    // Sort results
+    switch (sortBy) {
+      case "price-low":
+        filtered.sort((a, b) => parseInt(a.price.replace(/\D/g, '')) - parseInt(b.price.replace(/\D/g, '')));
+        break;
+      case "price-high":
+        filtered.sort((a, b) => parseInt(b.price.replace(/\D/g, '')) - parseInt(a.price.replace(/\D/g, '')));
+        break;
+      case "rating":
+        filtered.sort((a, b) => b.rating - a.rating);
+        break;
+      default: // newest
+        break;
+    }
+    
+    setFilteredServices(filtered);
+  };
+
+  React.useEffect(() => {
+    handleSearch();
+  }, [searchQuery, selectedCategory, sortBy]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -93,7 +134,7 @@ const Services = () => {
       <div className="bg-gradient-to-br from-primary/10 to-primary/5 border-b">
         <div className="container mx-auto px-4 py-16">
           <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6 animate-fade-in">
               اكتشف خدماتنا الأكاديمية
             </h1>
             <p className="text-xl text-muted-foreground mb-8">
@@ -109,7 +150,10 @@ const Services = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-12 h-14 text-lg"
               />
-              <Button className="absolute right-2 top-2 h-10">
+              <Button 
+                className="absolute right-2 top-2 h-10"
+                onClick={handleSearch}
+              >
                 ابحث
               </Button>
             </div>
@@ -127,7 +171,7 @@ const Services = () => {
             return (
               <Card 
                 key={category.id} 
-                className="hover:shadow-lg transition-all duration-300 cursor-pointer hover:-translate-y-1"
+                className="hover:shadow-lg transition-all duration-300 cursor-pointer hover:-translate-y-1 animate-scale-in"
                 onClick={() => setSelectedCategory(category.id)}
               >
                 <CardHeader className="text-center pb-4">
@@ -151,24 +195,44 @@ const Services = () => {
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-between mb-8">
           <div className="flex items-center gap-4">
             <span className="text-muted-foreground">ترتيب حسب:</span>
-            <select className="px-3 py-2 border rounded-md bg-background">
-              <option>الأحدث</option>
-              <option>الأعلى تقييماً</option>
-              <option>السعر (الأقل أولاً)</option>
-              <option>السعر (الأعلى أولاً)</option>
+            <select 
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="px-3 py-2 border rounded-md bg-background"
+            >
+              <option value="newest">الأحدث</option>
+              <option value="rating">الأعلى تقييماً</option>
+              <option value="price-low">السعر (الأقل أولاً)</option>
+              <option value="price-high">السعر (الأعلى أولاً)</option>
             </select>
           </div>
           
-          <Button variant="outline" className="gap-2">
-            <Filter className="h-4 w-4" />
-            فلاتر متقدمة
-          </Button>
+          {/* Category Filter */}
+          <div className="flex items-center gap-2">
+            <Button
+              variant={selectedCategory === "all" ? "default" : "outline"}
+              onClick={() => setSelectedCategory("all")}
+              size="sm"
+            >
+              الكل
+            </Button>
+            {serviceCategories.map((category) => (
+              <Button
+                key={category.id}
+                variant={selectedCategory === category.id ? "default" : "outline"}
+                onClick={() => setSelectedCategory(category.id)}
+                size="sm"
+              >
+                {category.name}
+              </Button>
+            ))}
+          </div>
         </div>
 
         {/* Services Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-          {mockServices.map((service) => (
-            <Card key={service.id} className="hover:shadow-lg transition-shadow duration-300">
+          {filteredServices.map((service) => (
+            <Card key={service.id} className="hover:shadow-lg transition-shadow duration-300 animate-fade-in">
               <CardHeader>
                 <div className="flex items-start justify-between mb-2">
                   <Badge variant="secondary" className="text-xs">
@@ -195,7 +259,12 @@ const Services = () => {
                   {/* Provider */}
                   <div className="text-sm">
                     <span className="text-muted-foreground">بواسطة: </span>
-                    <span className="font-medium text-primary">{service.provider}</span>
+                    <Link 
+                      to={`/providers/${service.id}`}
+                      className="font-medium text-primary hover:underline"
+                    >
+                      {service.provider}
+                    </Link>
                   </div>
 
                   {/* Features */}
@@ -218,22 +287,50 @@ const Services = () => {
                     </div>
                   </div>
 
-                  {/* Action Button */}
-                  <Button className="w-full">
-                    اطلب الخدمة
-                  </Button>
+                  {/* Action Buttons */}
+                  <div className="flex gap-2">
+                    <Link to={`/services/${service.id}`} className="flex-1">
+                      <Button variant="outline" className="w-full" size="sm">
+                        عرض التفاصيل
+                      </Button>
+                    </Link>
+                    <Link to="/service-request" className="flex-1">
+                      <Button className="w-full" size="sm">
+                        اطلب الخدمة
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
               </CardContent>
             </Card>
           ))}
         </div>
 
+        {/* No Results */}
+        {filteredServices.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground text-lg">لم يتم العثور على خدمات تطابق البحث</p>
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                setSearchQuery("");
+                setSelectedCategory("all");
+              }}
+              className="mt-4"
+            >
+              إعادة تعيين الفلاتر
+            </Button>
+          </div>
+        )}
+
         {/* Load More */}
-        <div className="text-center mt-12">
-          <Button variant="outline" size="lg">
-            عرض المزيد من الخدمات
-          </Button>
-        </div>
+        {filteredServices.length > 0 && (
+          <div className="text-center mt-12">
+            <Button variant="outline" size="lg">
+              عرض المزيد من الخدمات
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
