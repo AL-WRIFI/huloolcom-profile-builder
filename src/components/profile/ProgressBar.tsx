@@ -1,5 +1,6 @@
 
-import { Progress } from "@/components/ui/progress";
+import React from 'react';
+import CustomProgress from '@/components/ui/CustomProgress';
 
 interface ProgressBarProps {
   currentStep: number;
@@ -26,7 +27,7 @@ const ProgressBar = ({ currentStep, totalSteps, stepTitle, progress }: ProgressB
           </div>
         </div>
         
-        <Progress 
+        <CustomProgress 
           value={calculatedProgress} 
           className="h-3 bg-muted transition-all duration-500 ease-out"
         />
