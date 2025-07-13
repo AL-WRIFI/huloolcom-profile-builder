@@ -2,10 +2,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock, User, Briefcase } from 'lucide-react';
-import CustomButton from '@/components/ui/CustomButton';
-import { CustomCard, CustomCardContent, CustomCardHeader, CustomCardTitle, CustomCardDescription } from '@/components/ui/CustomCard';
-import CustomInput from '@/components/ui/CustomInput';
-import CustomBadge from '@/components/ui/CustomBadge';
 
 const Login = () => {
   const [userType, setUserType] = useState<'student' | 'provider'>('student');
@@ -29,7 +25,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5 flex items-center justify-center px-6 py-12">
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23f59e0b" fill-opacity="0.03"%3E%3Ccircle cx="7" cy="7" r="7"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23f59e0b\" fill-opacity=\"0.03\"%3E%3Ccircle cx=\"7\" cy=\"7\" r=\"7\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
       
       <div className="w-full max-w-md relative">
         <div className="text-center mb-8 animate-fade-in">
@@ -41,15 +37,15 @@ const Login = () => {
           </p>
         </div>
 
-        <CustomCard className="shadow-2xl border-0 bg-background/80 backdrop-blur-sm animate-scale-in">
-          <CustomCardHeader className="text-center pb-6">
-            <CustomCardTitle className="text-2xl">تسجيل الدخول</CustomCardTitle>
-            <CustomCardDescription>
+        <div className="rounded-lg border bg-card text-card-foreground shadow-sm shadow-2xl border-0 bg-background/80 backdrop-blur-sm animate-scale-in">
+          <div className="flex flex-col space-y-1.5 p-6 text-center pb-6">
+            <h3 className="text-2xl font-semibold leading-none tracking-tight">تسجيل الدخول</h3>
+            <p className="text-sm text-muted-foreground">
               اختر نوع حسابك وأدخل بياناتك
-            </CustomCardDescription>
-          </CustomCardHeader>
+            </p>
+          </div>
 
-          <CustomCardContent>
+          <div className="p-6 pt-0">
             {/* User Type Selection */}
             <div className="flex gap-2 mb-6 p-1 bg-muted rounded-lg">
               <button
@@ -84,13 +80,13 @@ const Login = () => {
                 <label className="text-sm font-medium">البريد الإلكتروني</label>
                 <div className="relative">
                   <Mail className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <CustomInput
+                  <input
                     type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
                     placeholder="أدخل بريدك الإلكتروني"
-                    className="pr-10"
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pr-10"
                     required
                   />
                 </div>
@@ -101,13 +97,13 @@ const Login = () => {
                 <label className="text-sm font-medium">كلمة المرور</label>
                 <div className="relative">
                   <Lock className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <CustomInput
+                  <input
                     type={showPassword ? 'text' : 'password'}
                     name="password"
                     value={formData.password}
                     onChange={handleInputChange}
                     placeholder="أدخل كلمة المرور"
-                    className="pr-10 pl-10"
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pr-10 pl-10"
                     required
                   />
                   <button
@@ -132,9 +128,9 @@ const Login = () => {
               </div>
 
               {/* Submit Button */}
-              <CustomButton type="submit" className="w-full py-6 text-base font-medium">
+              <button type="submit" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full py-6 text-base font-medium">
                 تسجيل الدخول
-              </CustomButton>
+              </button>
             </form>
 
             {/* Divider */}
@@ -149,10 +145,10 @@ const Login = () => {
 
             {/* Social Login */}
             <div className="space-y-3">
-              <CustomButton variant="outline" className="w-full py-6 text-base">
+              <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full py-6 text-base">
                 <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" className="h-5 w-5 ml-2" />
                 الدخول بحساب Google
-              </CustomButton>
+              </button>
             </div>
 
             {/* Sign Up Link */}
@@ -189,8 +185,8 @@ const Login = () => {
                 )}
               </div>
             </div>
-          </CustomCardContent>
-        </CustomCard>
+          </div>
+        </div>
 
         {/* Features */}
         <div className="mt-8 grid grid-cols-3 gap-4 text-center animate-fade-in" style={{animationDelay: '300ms'}}>
