@@ -1,5 +1,11 @@
 
 import { UseFormReturn, useFieldArray } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Card, CardContent } from "@/components/ui/card";
 import { Plus, X, ChevronDown } from "lucide-react";
 import { ProfileData } from "../ProfileBuilder";
 
@@ -53,94 +59,109 @@ const ServicesStep = ({ form }: ServicesStepProps) => {
 
       <div className="space-y-4">
         {fields.map((field, index) => (
-          <div key={field.id} className="relative bg-card rounded-xl border border-border p-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Service Type */}
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-foreground">نوع الخدمة</label>
-                <div className="relative">
-                  <select
-                    value={watchedServices[index]?.serviceType || ""}
-                    onChange={(e) => setValue(`services.${index}.serviceType`, e.target.value)}
-                    className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent appearance-none"
-                  >
-                    <option value="">اختر نوع الخدمة</option>
-                    {APPROVED_SERVICES.map((service) => (
-                      <option key={service.value} value={service.value}>
-                        {service.label}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                </div>
-              </div>
-
-              {/* Custom Service (if "other" selected) */}
-              {watchedServices[index]?.serviceType === "other" && (
+          <Card key={field.id} className="relative">
+            <CardContent className="p-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Service Type */}
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-foreground">تفاصيل الخدمة</label>
-                  <input
-                    placeholder="اكتب تفاصيل الخدمة"
-                    value={watchedServices[index]?.customService || ""}
-                    onChange={(e) => setValue(`services.${index}.customService`, e.target.value)}
-                    className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  <Label>نوع الخدمة</Label>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="w-full justify-between">
+                        {watchedServices[index]?.serviceType ? 
+                          APPROVED_SERVICES.find(s => s.value === watchedServices[index].serviceType)?.label :
+                          "اختر نوع الخدمة"
+                        }
+                        <ChevronDown className="w-4 h-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      {APPROVED_SERVICES.map((service) => (
+                        <DropdownMenuItem
+                          key={service.value}
+                          onClick={() => setValue(`services.${index}.serviceType`, service.value)}
+                        >
+                          {service.label}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+
+                {/* Custom Service (if "other" selected) */}
+                {watchedServices[index]?.serviceType === "other" && (
+                  <div className="space-y-2">
+                    <Label>تفاصيل الخدمة</Label>
+                    <Input
+                      placeholder="اكتب تفاصيل الخدمة"
+                      value={watchedServices[index]?.customService || ""}
+                      onChange={(e) => setValue(`services.${index}.customService`, e.target.value)}
+                    />
+                  </div>
+                )}
+
+                {/* Service Category */}
+                <div className="space-y-2">
+                  <Label>تصنيف الخدمة</Label>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="w-full justify-between">
+                        {watchedServices[index]?.category ? 
+                          SERVICE_CATEGORIES.find(c => c.value === watchedServices[index].category)?.label :
+                          "اختر التصنيف"
+                        }
+                        <ChevronDown className="w-4 h-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      {SERVICE_CATEGORIES.map((category) => (
+                        <DropdownMenuItem
+                          key={category.value}
+                          onClick={() => setValue(`services.${index}.category`, category.value)}
+                        >
+                          {category.label}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+
+                {/* Service Description */}
+                <div className="md:col-span-2 space-y-2">
+                  <Label>وصف مختصر للخدمة</Label>
+                  <Textarea
+                    placeholder="اكتب وصفاً مختصراً للخدمة التي تقدمها..."
+                    value={watchedServices[index]?.description || ""}
+                    onChange={(e) => setValue(`services.${index}.description`, e.target.value)}
+                    rows={3}
                   />
                 </div>
-              )}
-
-              {/* Service Category */}
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-foreground">تصنيف الخدمة</label>
-                <div className="relative">
-                  <select
-                    value={watchedServices[index]?.category || ""}
-                    onChange={(e) => setValue(`services.${index}.category`, e.target.value)}
-                    className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent appearance-none"
-                  >
-                    <option value="">اختر التصنيف</option>
-                    {SERVICE_CATEGORIES.map((category) => (
-                      <option key={category.value} value={category.value}>
-                        {category.label}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                </div>
               </div>
 
-              {/* Service Description */}
-              <div className="md:col-span-2 space-y-2">
-                <label className="block text-sm font-medium text-foreground">وصف مختصر للخدمة</label>
-                <textarea
-                  placeholder="اكتب وصفاً مختصراً للخدمة التي تقدمها..."
-                  value={watchedServices[index]?.description || ""}
-                  onChange={(e) => setValue(`services.${index}.description`, e.target.value)}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
-                />
-              </div>
-            </div>
-
-            {/* Remove Service */}
-            <button
-              type="button"
-              onClick={() => remove(index)}
-              className="absolute top-2 right-2 p-2 text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
+              {/* Remove Service */}
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => remove(index)}
+                className="absolute top-2 right-2 h-8 w-8 p-0 text-destructive"
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </CardContent>
+          </Card>
         ))}
       </div>
 
-      <button
+      <Button
         type="button"
+        variant="outline"
         onClick={addService}
-        className="w-full border-dashed border-2 border-primary/30 hover:border-primary/50 bg-card hover:bg-primary/5 text-foreground py-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+        className="w-full border-dashed border-2 hover:border-primary"
       >
-        <Plus className="w-4 h-4" />
+        <Plus className="w-4 h-4 mr-2" />
         إضافة خدمة جديدة
-      </button>
+      </Button>
     </div>
   );
 };

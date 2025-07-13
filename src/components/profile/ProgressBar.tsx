@@ -1,5 +1,6 @@
 
 import React from 'react';
+import CustomProgress from '@/components/ui/CustomProgress';
 
 interface ProgressBarProps {
   currentStep: number;
@@ -26,13 +27,10 @@ const ProgressBar = ({ currentStep, totalSteps, stepTitle, progress }: ProgressB
           </div>
         </div>
         
-        {/* Custom Progress Bar */}
-        <div className="w-full bg-muted rounded-full h-3 overflow-hidden transition-all duration-500 ease-out">
-          <div 
-            className="bg-primary h-full rounded-full transition-all duration-500 ease-out"
-            style={{ width: `${calculatedProgress}%` }}
-          ></div>
-        </div>
+        <CustomProgress 
+          value={calculatedProgress} 
+          className="h-3 bg-muted transition-all duration-500 ease-out"
+        />
         
         {/* Step indicators */}
         <div className="flex justify-between mt-3">
