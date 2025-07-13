@@ -1,12 +1,14 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Eye, EyeOff, Mail, Lock, ArrowLeft } from 'lucide-react';
-import { CustomCard, CustomCardContent, CustomCardHeader, CustomCardTitle } from '@/components/ui/CustomCard';
+import { Eye, EyeOff, Mail, Lock, User, Briefcase } from 'lucide-react';
 import CustomButton from '@/components/ui/CustomButton';
+import { CustomCard, CustomCardContent, CustomCardHeader, CustomCardTitle, CustomCardDescription } from '@/components/ui/CustomCard';
 import CustomInput from '@/components/ui/CustomInput';
+import CustomBadge from '@/components/ui/CustomBadge';
 
 const Login = () => {
+  const [userType, setUserType] = useState<'student' | 'provider'>('student');
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -14,136 +16,203 @@ const Login = () => {
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login attempt:', formData);
+    console.log('Login attempt:', { ...formData, userType });
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Back Button */}
-        <Link to="/" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 mb-6 transition-colors">
-          <ArrowLeft className="w-4 h-4" />
-          العودة للرئيسية
-        </Link>
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5 flex items-center justify-center px-6 py-12">
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23f59e0b" fill-opacity="0.03"%3E%3Ccircle cx="7" cy="7" r="7"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
+      
+      <div className="w-full max-w-md relative">
+        <div className="text-center mb-8 animate-fade-in">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-2">
+            مرحباً بعودتك
+          </h1>
+          <p className="text-muted-foreground">
+            سجل الدخول للوصول إلى حسابك
+          </p>
+        </div>
 
-        <CustomCard className="shadow-xl">
-          <CustomCardHeader className="text-center pb-8">
-            <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-r from-blue-600 to-purple-700 rounded-full flex items-center justify-center">
-              <Lock className="w-10 h-10 text-white" />
-            </div>
-            <CustomCardTitle className="text-2xl font-bold text-gray-800">
-              تسجيل الدخول
-            </CustomCardTitle>
-            <p className="text-gray-600 mt-2">مرحباً بك مرة أخرى في منصتنا</p>
+        <CustomCard className="shadow-2xl border-0 bg-background/80 backdrop-blur-sm animate-scale-in">
+          <CustomCardHeader className="text-center pb-6">
+            <CustomCardTitle className="text-2xl">تسجيل الدخول</CustomCardTitle>
+            <CustomCardDescription>
+              اختر نوع حسابك وأدخل بياناتك
+            </CustomCardDescription>
           </CustomCardHeader>
 
           <CustomCardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            {/* User Type Selection */}
+            <div className="flex gap-2 mb-6 p-1 bg-muted rounded-lg">
+              <button
+                type="button"
+                onClick={() => setUserType('student')}
+                className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-md text-sm font-medium transition-all ${
+                  userType === 'student'
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <User className="h-4 w-4" />
+                طالب
+              </button>
+              <button
+                type="button"
+                onClick={() => setUserType('provider')}
+                className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-md text-sm font-medium transition-all ${
+                  userType === 'provider'
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <Briefcase className="h-4 w-4" />
+                مزود خدمة
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
               {/* Email Field */}
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                  البريد الإلكتروني
-                </label>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">البريد الإلكتروني</label>
                 <div className="relative">
+                  <Mail className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <CustomInput
-                    id="email"
-                    name="email"
                     type="email"
+                    name="email"
                     value={formData.email}
                     onChange={handleInputChange}
                     placeholder="أدخل بريدك الإلكتروني"
-                    className="pl-10"
+                    className="pr-10"
                     required
                   />
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 </div>
               </div>
 
               {/* Password Field */}
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                  كلمة المرور
-                </label>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">كلمة المرور</label>
                 <div className="relative">
+                  <Lock className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <CustomInput
-                    id="password"
-                    name="password"
                     type={showPassword ? 'text' : 'password'}
+                    name="password"
                     value={formData.password}
                     onChange={handleInputChange}
                     placeholder="أدخل كلمة المرور"
-                    className="pl-10 pr-10"
+                    className="pr-10 pl-10"
                     required
                   />
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
                 </div>
               </div>
 
-              {/* Remember Me & Forgot Password */}
-              <div className="flex items-center justify-between">
-                <label className="flex items-center">
-                  <input type="checkbox" className="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-                  <span className="mr-2 text-sm text-gray-600">تذكرني</span>
+              {/* Remember & Forgot */}
+              <div className="flex items-center justify-between text-sm">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" className="rounded border-input" />
+                  <span>تذكرني</span>
                 </label>
-                <Link to="/forgot-password" className="text-sm text-blue-600 hover:text-blue-800">
+                <Link to="/forgot-password" className="text-primary hover:underline">
                   نسيت كلمة المرور؟
                 </Link>
               </div>
 
               {/* Submit Button */}
-              <CustomButton type="submit" className="w-full py-3 text-lg font-medium">
+              <CustomButton type="submit" className="w-full py-6 text-base font-medium">
                 تسجيل الدخول
               </CustomButton>
-
-              {/* Divider */}
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300" />
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">أو</span>
-                </div>
-              </div>
-
-              {/* Social Login */}
-              <div className="space-y-3">
-                <CustomButton variant="outline" className="w-full py-3 border-gray-300 hover:bg-gray-50">
-                  <svg className="w-5 h-5 ml-2" viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                    <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                  </svg>
-                  تسجيل الدخول بجوجل
-                </CustomButton>
-              </div>
-
-              {/* Sign Up Link */}
-              <div className="text-center">
-                <span className="text-gray-600">ليس لديك حساب؟ </span>
-                <Link to="/register" className="text-blue-600 hover:text-blue-800 font-medium">
-                  إنشاء حساب جديد
-                </Link>
-              </div>
             </form>
+
+            {/* Divider */}
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-muted"></div>
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">أو</span>
+              </div>
+            </div>
+
+            {/* Social Login */}
+            <div className="space-y-3">
+              <CustomButton variant="outline" className="w-full py-6 text-base">
+                <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" className="h-5 w-5 ml-2" />
+                الدخول بحساب Google
+              </CustomButton>
+            </div>
+
+            {/* Sign Up Link */}
+            <p className="text-center text-sm text-muted-foreground mt-6">
+              ليس لديك حساب؟{' '}
+              <Link to="/register" className="text-primary hover:underline font-medium">
+                إنشاء حساب جديد
+              </Link>
+            </p>
+
+            {/* User Type Info */}
+            <div className="mt-6 p-4 bg-muted/50 rounded-lg">
+              <div className="flex items-start gap-3">
+                {userType === 'student' ? (
+                  <>
+                    <User className="h-5 w-5 text-primary mt-0.5" />
+                    <div className="text-sm">
+                      <p className="font-medium text-foreground mb-1">حساب الطالب</p>
+                      <p className="text-muted-foreground text-xs">
+                        يمكنك طلب الخدمات الأكاديمية ومتابعة طلباتك
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <Briefcase className="h-5 w-5 text-primary mt-0.5" />
+                    <div className="text-sm">
+                      <p className="font-medium text-foreground mb-1">حساب مزود الخدمة</p>
+                      <p className="text-muted-foreground text-xs">
+                        يمكنك تقديم الخدمات الأكاديمية وإدارة عملائك
+                      </p>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
           </CustomCardContent>
         </CustomCard>
+
+        {/* Features */}
+        <div className="mt-8 grid grid-cols-3 gap-4 text-center animate-fade-in" style={{animationDelay: '300ms'}}>
+          <div className="space-y-2">
+            <div className="w-8 h-8 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
+              <div className="w-3 h-3 bg-primary rounded-full"></div>
+            </div>
+            <p className="text-xs text-muted-foreground">أمان عالي</p>
+          </div>
+          <div className="space-y-2">
+            <div className="w-8 h-8 mx-auto bg-green-500/10 rounded-full flex items-center justify-center">
+              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+            </div>
+            <p className="text-xs text-muted-foreground">سرعة في الاستجابة</p>
+          </div>
+          <div className="space-y-2">
+            <div className="w-8 h-8 mx-auto bg-blue-500/10 rounded-full flex items-center justify-center">
+              <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+            </div>
+            <p className="text-xs text-muted-foreground">دعم 24/7</p>
+          </div>
+        </div>
       </div>
     </div>
   );
