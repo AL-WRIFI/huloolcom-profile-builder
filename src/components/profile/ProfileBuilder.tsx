@@ -1,10 +1,6 @@
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 import { CheckCircle, User, Languages, FileText, Briefcase, Award, MessageSquare, CreditCard } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import BasicInfoStep from "./steps/BasicInfoStep";
 import LanguagesStep from "./steps/LanguagesStep";
 import DocumentsStep from "./steps/DocumentsStep";
@@ -79,16 +75,21 @@ export interface ProfileData {
 const ProfileBuilder = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
-
-  const form = useForm<ProfileData>({
-    defaultValues: {
-      languages: [],
-      documents: [],
-      services: [],
-      achievements: [],
-      socialLinks: [],
-      biography: "",
-    }
+  const [profileData, setProfileData] = useState<ProfileData>({
+    identityId: "",
+    nationality: "",
+    gender: "male",
+    birthDate: "",
+    country: "",
+    city: "",
+    educationLevel: "",
+    specialization: "",
+    languages: [],
+    documents: [],
+    services: [],
+    achievements: [],
+    socialLinks: [],
+    biography: "",
   });
 
   const steps = [
@@ -125,21 +126,30 @@ const ProfileBuilder = () => {
     setCurrentStep(stepId);
   };
 
+  const updateProfileData = (newData: Partial<ProfileData>) => {
+    setProfileData(prev => ({ ...prev, ...newData }));
+  };
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-card border-b sticky top-0 z-10">
+      <div className="bg-white border-b sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-foreground">إعداد ملفك الشخصي</h1>
-              <p className="text-muted-foreground">أكمل ملفك الشخصي لتصبح مزود خدمات معتمد</p>
+              <h1 className="text-2xl font-bold text-gray-900">إعداد ملفك الشخصي</h1>
+              <p className="text-gray-600">أكمل ملفك الشخصي لتصبح مزود خدمات معتمد</p>
             </div>
             <div className="text-right">
-              <div className="text-sm text-muted-foreground mb-1">نسبة الإكمال</div>
+              <div className="text-sm text-gray-600 mb-1">نسبة الإكمال</div>
               <div className="flex items-center gap-3">
-                <Progress value={progressPercentage} className="w-32" />
-                <span className="font-medium text-primary">{Math.round(progressPercentage)}%</span>
+                <div className="w-32 bg-gray-200 rounded-full h-2">
+                  <div 
+                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${progressPercentage}%` }}
+                  />
+                </div>
+                <span className="font-medium text-blue-600">{Math.round(progressPercentage)}%</span>
               </div>
             </div>
           </div>
@@ -150,8 +160,8 @@ const ProfileBuilder = () => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Side Navigation */}
           <div className="lg:col-span-1">
-            <Card className="sticky top-24">
-              <CardContent className="p-6">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 sticky top-24">
+              <div className="p-6">
                 <div className="space-y-3">
                   {steps.map((step) => {
                     const IconComponent = step.icon;
@@ -164,11 +174,11 @@ const ProfileBuilder = () => {
                         key={step.id}
                         className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all ${
                           isCurrent
-                            ? "bg-primary/10 border border-primary/20"
+                            ? "bg-blue-50 border border-blue-200"
                             : isCompleted
                             ? "bg-green-50 hover:bg-green-100"
                             : isAccessible
-                            ? "hover:bg-muted/50"
+                            ? "hover:bg-gray-50"
                             : "opacity-50 cursor-not-allowed"
                         }`}
                         onClick={() => isAccessible && handleStepClick(step.id)}
@@ -177,8 +187,8 @@ const ProfileBuilder = () => {
                           isCompleted
                             ? "bg-green-500 text-white"
                             : isCurrent
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-muted text-muted-foreground"
+                            ? "bg-blue-600 text-white"
+                            : "bg-gray-200 text-gray-500"
                         }`}>
                           {isCompleted ? (
                             <CheckCircle className="w-4 h-4" />
@@ -190,15 +200,15 @@ const ProfileBuilder = () => {
                         <div className="flex-1 min-w-0">
                           <div className={`text-sm font-medium truncate ${
                             isCurrent
-                              ? "text-primary"
+                              ? "text-blue-600"
                               : isCompleted
                               ? "text-green-700"
-                              : "text-foreground"
+                              : "text-gray-900"
                           }`}>
                             {step.name}
                           </div>
                           {isCurrent && (
-                            <div className="text-xs text-muted-foreground">
+                            <div className="text-xs text-gray-500">
                               الخطوة {step.id} من {steps.length}
                             </div>
                           )}
@@ -211,74 +221,89 @@ const ProfileBuilder = () => {
                 {/* Progress Summary */}
                 <div className="mt-6 pt-4 border-t">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-primary mb-1">
+                    <div className="text-2xl font-bold text-blue-600 mb-1">
                       {completedSteps.length}/{steps.length}
                     </div>
-                    <div className="text-sm text-muted-foreground">
+                    <div className="text-sm text-gray-500">
                       خطوات مكتملة
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
 
           {/* Main Content */}
           <div className="lg:col-span-3">
-            <Card className="min-h-[600px]">
-              <CardContent className="p-8">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 min-h-[600px]">
+              <div className="p-8">
                 {/* Step Header */}
                 <div className="mb-8">
                   <div className="flex items-center gap-4 mb-4">
                     {currentStepData && (
                       <>
-                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                          <currentStepData.icon className="w-6 h-6 text-primary" />
+                        <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center">
+                          <currentStepData.icon className="w-6 h-6 text-blue-600" />
                         </div>
                         <div>
-                          <h2 className="text-2xl font-bold text-foreground">
+                          <h2 className="text-2xl font-bold text-gray-900">
                             {currentStepData.name}
                           </h2>
-                          <p className="text-muted-foreground">
+                          <p className="text-gray-600">
                             الخطوة {currentStep} من {steps.length}
                           </p>
                         </div>
                       </>
                     )}
                   </div>
-                  <Progress value={(currentStep / steps.length) * 100} className="h-2" />
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                      style={{ width: `${(currentStep / steps.length) * 100}%` }}
+                    />
+                  </div>
                 </div>
 
                 {/* Step Component */}
                 <div className="mb-8">
-                  {CurrentStepComponent && <CurrentStepComponent form={form} />}
+                  {CurrentStepComponent && (
+                    <CurrentStepComponent 
+                      data={profileData} 
+                      updateData={updateProfileData} 
+                    />
+                  )}
                 </div>
 
                 {/* Navigation Buttons */}
                 <div className="flex justify-between pt-6 border-t">
-                  <Button
-                    variant="outline"
+                  <button
                     onClick={handlePrevious}
                     disabled={currentStep === 1}
-                    className="px-8"
+                    className="px-8 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     السابق
-                  </Button>
+                  </button>
 
                   <div className="flex gap-3">
                     {currentStep < steps.length ? (
-                      <Button onClick={handleNext} className="px-8">
+                      <button 
+                        onClick={handleNext} 
+                        className="px-8 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                      >
                         التالي
-                      </Button>
+                      </button>
                     ) : (
-                      <Button onClick={handleNext} className="px-8">
+                      <button 
+                        onClick={handleNext} 
+                        className="px-8 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                      >
                         إنهاء الإعداد
-                      </Button>
+                      </button>
                     )}
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
       </div>
