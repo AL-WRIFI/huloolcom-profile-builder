@@ -11,7 +11,9 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 95%;
+    /* الخلفيات الفاتحة #F2F2F3 */
+    --background: 240 2% 95%;
+    /* اللون الداكن للنصوص #333333 */
     --foreground: 0 0% 20%;
 
     --card: 0 0% 100%;
@@ -20,16 +22,18 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 20%;
 
-    --primary: 45 95% 55%;
+    /* اللون الرئيسي #F8C421 */
+    --primary: 48 93% 55%;
     --primary-foreground: 0 0% 20%;
 
-    --secondary: 0 0% 95%;
+    /* الخلفيات الفاتحة #F2F2F3 */
+    --secondary: 240 2% 95%;
     --secondary-foreground: 0 0% 20%;
 
-    --muted: 0 0% 95%;
+    --muted: 240 2% 95%;
     --muted-foreground: 0 0% 45%;
 
-    --accent: 45 95% 55%;
+    --accent: 48 93% 55%;
     --accent-foreground: 0 0% 20%;
 
     --destructive: 0 84.2% 60.2%;
@@ -37,7 +41,7 @@ All colors MUST be HSL.
 
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 45 95% 55%;
+    --ring: 48 93% 55%;
 
     --radius: 0.5rem;
 
