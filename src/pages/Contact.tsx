@@ -1,6 +1,11 @@
 
 import { useState } from "react";
 import { Mail, Phone, MapPin, Clock, Send, MessageCircle, Users, Award } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import Header from "@/components/layout/Header";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -52,47 +57,24 @@ const Contact = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
-      {/* Header */}
-      <header className="bg-white/80 backdrop-blur-md border-b border-gray-200/50 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Huloolcom
-              </div>
-            </div>
-            <nav className="hidden md:flex items-center space-x-8">
-              <a href="/" className="text-gray-700 hover:text-blue-600 transition-colors">الرئيسية</a>
-              <a href="/services" className="text-gray-700 hover:text-blue-600 transition-colors">الخدمات</a>
-              <a href="/about" className="text-gray-700 hover:text-blue-600 transition-colors">من نحن</a>
-              <a href="/contact" className="text-blue-600 font-medium">تواصل معنا</a>
-            </nav>
-            <div className="flex items-center space-x-4">
-              <a href="/login" className="text-gray-700 hover:text-blue-600 transition-colors">تسجيل الدخول</a>
-              <a href="/register" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-600 text-white hover:bg-blue-700 h-10 px-4 py-2">
-                إنشاء حساب
-              </a>
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
+      <Header />
       
       {/* Hero Section */}
-      <section className="relative py-20 px-4 bg-gradient-to-r from-blue-600/10 via-white to-purple-600/10 overflow-hidden">
+      <section className="relative py-20 px-4 bg-gradient-to-r from-primary/10 via-background to-primary/5 overflow-hidden">
         <div className="absolute inset-0 -z-10">
-          <div className="absolute top-10 left-10 w-32 h-32 bg-blue-600/10 rounded-full blur-xl animate-pulse"></div>
-          <div className="absolute bottom-10 right-10 w-48 h-48 bg-blue-600/5 rounded-full blur-2xl animate-pulse delay-1000"></div>
+          <div className="absolute top-10 left-10 w-32 h-32 bg-primary/10 rounded-full blur-xl animate-pulse"></div>
+          <div className="absolute bottom-10 right-10 w-48 h-48 bg-primary/5 rounded-full blur-2xl animate-pulse delay-1000"></div>
         </div>
         
         <div className="container mx-auto text-center">
-          <div className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm animate-scale-in">
+          <Badge className="mb-6 px-4 py-2 text-sm animate-scale-in">
             📞 نحن هنا لمساعدتك
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 animate-fade-in">
+          </Badge>
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6 animate-fade-in">
             تواصل معنا
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed animate-fade-in">
+          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed animate-fade-in">
             فريق الدعم لدينا متاح على مدار الساعة لمساعدتك في أي استفسار أو مشكلة قد تواجهها
           </p>
         </div>
@@ -108,13 +90,13 @@ const Contact = () => {
                 className="text-center group animate-fade-in"
                 style={{animationDelay: `${index * 200}ms`}}
               >
-                <div className="bg-blue-50 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <stat.icon className="h-10 w-10 text-blue-600" />
+                <div className="bg-primary/10 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <stat.icon className="h-10 w-10 text-primary" />
                 </div>
-                <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">
+                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
                   {stat.number}
                 </div>
-                <div className="text-gray-600 font-medium">{stat.label}</div>
+                <div className="text-muted-foreground font-medium">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -124,29 +106,28 @@ const Contact = () => {
       <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Form */}
-          <div className="rounded-lg border border-gray-200 bg-white text-gray-900 shadow-sm shadow-2xl bg-white/80 backdrop-blur-sm animate-fade-in">
-            <div className="flex flex-col space-y-1.5 p-6 text-center pb-6">
-              <h3 className="text-2xl font-semibold leading-none tracking-tight text-gray-900 mb-2">
+          <Card className="shadow-2xl border-0 bg-white/80 backdrop-blur-sm animate-fade-in">
+            <CardHeader>
+              <CardTitle className="text-2xl font-bold text-foreground mb-2">
                 أرسل لنا رسالة
-              </h3>
-              <p className="text-sm text-gray-600">
+              </CardTitle>
+              <p className="text-muted-foreground">
                 سنرد عليك في أقرب وقت ممكن
               </p>
-            </div>
-
-            <div className="p-6 pt-0">
+            </CardHeader>
+            <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* User Type */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-900">نوع المستخدم</label>
+                  <label className="text-sm font-medium text-foreground">نوع المستخدم</label>
                   <div className="grid grid-cols-2 gap-3">
                     <button
                       type="button"
                       onClick={() => setFormData({...formData, userType: "student"})}
                       className={`p-3 rounded-lg border-2 transition-all duration-300 ${
                         formData.userType === "student"
-                          ? "border-blue-600 bg-blue-50 text-blue-600"
-                          : "border-gray-200 hover:border-blue-300"
+                          ? "border-primary bg-primary/5 text-primary"
+                          : "border-border hover:border-primary/50"
                       }`}
                     >
                       <span className="text-sm font-medium">طالب</span>
@@ -156,8 +137,8 @@ const Contact = () => {
                       onClick={() => setFormData({...formData, userType: "provider"})}
                       className={`p-3 rounded-lg border-2 transition-all duration-300 ${
                         formData.userType === "provider"
-                          ? "border-blue-600 bg-blue-50 text-blue-600"
-                          : "border-gray-200 hover:border-blue-300"
+                          ? "border-primary bg-primary/5 text-primary"
+                          : "border-border hover:border-primary/50"
                       }`}
                     >
                       <span className="text-sm font-medium">مزود خدمة</span>
@@ -168,23 +149,21 @@ const Contact = () => {
                 {/* Name and Email */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-900">الاسم الكامل</label>
-                    <input
+                    <label className="text-sm font-medium text-foreground">الاسم الكامل</label>
+                    <Input
                       placeholder="أدخل اسمك الكامل"
                       value={formData.name}
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-900">البريد الإلكتروني</label>
-                    <input
+                    <label className="text-sm font-medium text-foreground">البريد الإلكتروني</label>
+                    <Input
                       type="email"
                       placeholder="أدخل بريدك الإلكتروني"
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                       required
                     />
                   </div>
@@ -193,20 +172,19 @@ const Contact = () => {
                 {/* Phone and Subject */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-900">رقم الهاتف</label>
-                    <input
+                    <label className="text-sm font-medium text-foreground">رقم الهاتف</label>
+                    <Input
                       placeholder="أدخل رقم هاتفك"
                       value={formData.phone}
                       onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                      className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-900">موضوع الرسالة</label>
+                    <label className="text-sm font-medium text-foreground">موضوع الرسالة</label>
                     <select
                       value={formData.subject}
                       onChange={(e) => setFormData({...formData, subject: e.target.value})}
-                      className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="w-full px-3 py-2 border border-border rounded-md bg-background"
                       required
                     >
                       <option value="">اختر الموضوع</option>
@@ -221,67 +199,70 @@ const Contact = () => {
 
                 {/* Message */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-900">الرسالة</label>
+                  <label className="text-sm font-medium text-foreground">الرسالة</label>
                   <textarea
                     placeholder="اكتب رسالتك هنا..."
                     value={formData.message}
                     onChange={(e) => setFormData({...formData, message: e.target.value})}
-                    className="flex min-h-32 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-vertical"
+                    className="w-full px-3 py-2 border border-border rounded-md bg-background min-h-32 resize-vertical"
                     required
                   />
                 </div>
 
-                <button type="submit" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-600 text-white hover:bg-blue-700 h-10 px-4 py-2 w-full">
+                <Button type="submit" className="w-full">
                   <Send className="h-4 w-4 ml-2" />
                   إرسال الرسالة
-                </button>
+                </Button>
               </form>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
           {/* Contact Information */}
           <div className="space-y-8 animate-fade-in">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              <h2 className="text-2xl font-bold text-foreground mb-6">
                 معلومات التواصل
               </h2>
               <div className="space-y-6">
                 {contactInfo.map((info, index) => (
-                  <div key={index} className="rounded-lg border border-gray-200 bg-white text-gray-900 shadow-sm hover:shadow-lg transition-all duration-300 group hover:-translate-y-1">
-                    <div className="p-6">
+                  <Card 
+                    key={index} 
+                    className="hover:shadow-lg transition-all duration-300 border-0 shadow-md group hover:-translate-y-1"
+                  >
+                    <CardContent className="pt-6">
                       <div className="flex items-start gap-4">
-                        <div className={`p-3 rounded-full bg-blue-50 group-hover:scale-110 transition-transform duration-300`}>
+                        <div className={`p-3 rounded-full bg-primary/10 group-hover:scale-110 transition-transform duration-300`}>
                           <info.icon className={`h-6 w-6 ${info.color}`} />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                          <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
                             {info.title}
                           </h3>
                           {info.details.map((detail, detailIndex) => (
-                            <p key={detailIndex} className="text-gray-600 text-sm mb-1">
+                            <p key={detailIndex} className="text-muted-foreground text-sm mb-1">
                               {detail}
                             </p>
                           ))}
                         </div>
                       </div>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
                 ))}
               </div>
             </div>
 
             {/* Map Placeholder */}
-            <div className="rounded-lg border border-gray-200 bg-white text-gray-900 shadow-sm overflow-hidden shadow-lg">
-              <div className="h-64 bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center">
+            <Card className="overflow-hidden shadow-lg border-0">
+              <div className="h-64 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
                 <div className="text-center">
-                  <MapPin className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-                  <h3 className="font-semibold text-gray-900 mb-2">موقعنا على الخريطة</h3>
-                  <p className="text-gray-600 text-sm">
+                  <MapPin className="h-12 w-12 text-primary mx-auto mb-4" />
+                  <h3 className="font-semibold text-foreground mb-2">موقعنا على الخريطة</h3>
+                  <p className="text-muted-foreground text-sm">
                     الرياض، المملكة العربية السعودية
                   </p>
                 </div>
               </div>
-            </div>
+            </Card>
           </div>
         </div>
       </div>
