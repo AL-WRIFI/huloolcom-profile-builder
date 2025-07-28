@@ -1,11 +1,10 @@
 
-import React, { useState } from "react";
+import { UseFormReturn } from "react-hook-form";
 import { Upload, ChevronDown } from "lucide-react";
 import { ProfileData } from "../ProfileBuilder";
 
 interface BasicInfoStepProps {
-  data: ProfileData;
-  updateData: (newData: Partial<ProfileData>) => void;
+  form: UseFormReturn<ProfileData>;
 }
 
 const NATIONALITIES = [
@@ -36,44 +35,38 @@ const SPECIALIZATIONS = [
   { value: "other", label: "أخرى" }
 ];
 
-const BasicInfoStep = ({ data, updateData }: BasicInfoStepProps) => {
-  const [showNationalityDropdown, setShowNationalityDropdown] = useState(false);
-  const [showEducationDropdown, setShowEducationDropdown] = useState(false);
-  const [showSpecializationDropdown, setShowSpecializationDropdown] = useState(false);
-
-  const handleInputChange = (field: keyof ProfileData, value: any) => {
-    updateData({ [field]: value });
-  };
+const BasicInfoStep = ({ form }: BasicInfoStepProps) => {
+  const { register, watch, setValue } = form;
+  const watchedValues = watch();
 
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Identity ID */}
         <div className="space-y-2">
-          <label htmlFor="identityId" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="identityId" className="block text-sm font-medium text-foreground">
             رقم الهوية *
           </label>
           <input
             id="identityId"
-            type="text"
-            required
-            value={data.identityId}
-            onChange={(e) => handleInputChange('identityId', e.target.value)}
+            {...register("identityId", { required: true })}
             placeholder="أدخل رقم الهوية"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           />
         </div>
 
         {/* Identity Image Upload */}
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">صورة الهوية *</label>
-          <div className="border-2 border-dashed border-blue-200 hover:border-blue-400 transition-colors rounded-lg">
+          <label className="block text-sm font-medium text-foreground">
+            صورة الهوية *
+          </label>
+          <div className="border-2 border-dashed border-primary/20 hover:border-primary/40 transition-colors rounded-lg bg-card">
             <div className="flex flex-col items-center justify-center p-6">
-              <Upload className="w-8 h-8 text-gray-400 mb-2" />
-              <p className="text-sm text-gray-500 text-center">
+              <Upload className="w-8 h-8 text-muted-foreground mb-2" />
+              <p className="text-sm text-muted-foreground text-center">
                 اسحب الملف هنا أو اضغط للرفع
               </p>
-              <button className="mt-2 px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+              <button className="mt-2 px-4 py-2 text-sm border border-border bg-background text-foreground rounded-lg hover:bg-muted/50 transition-colors">
                 اختر ملف
               </button>
             </div>
@@ -81,195 +74,142 @@ const BasicInfoStep = ({ data, updateData }: BasicInfoStepProps) => {
         </div>
 
         {/* Nationality */}
-        <div className="space-y-2 relative">
-          <label className="block text-sm font-medium text-gray-700">الجنسية *</label>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-foreground">
+            الجنسية *
+          </label>
           <div className="relative">
-            <button
-              type="button"
-              onClick={() => setShowNationalityDropdown(!showNationalityDropdown)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right bg-white flex items-center justify-between"
+            <select
+              value={watchedValues.nationality || ""}
+              onChange={(e) => setValue("nationality", e.target.value)}
+              className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent appearance-none"
             >
-              <span>
-                {data.nationality ? 
-                  NATIONALITIES.find(n => n.value === data.nationality)?.label :
-                  "اختر الجنسية"
-                }
-              </span>
-              <ChevronDown className="w-4 h-4" />
-            </button>
-            {showNationalityDropdown && (
-              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
-                {NATIONALITIES.map((nationality) => (
-                  <button
-                    key={nationality.value}
-                    type="button"
-                    onClick={() => {
-                      handleInputChange('nationality', nationality.value);
-                      setShowNationalityDropdown(false);
-                    }}
-                    className="w-full px-3 py-2 text-right hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg"
-                  >
-                    {nationality.label}
-                  </button>
-                ))}
-              </div>
-            )}
+              <option value="">اختر الجنسية</option>
+              {NATIONALITIES.map((nationality) => (
+                <option key={nationality.value} value={nationality.value}>
+                  {nationality.label}
+                </option>
+              ))}
+            </select>
+            <ChevronDown className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
           </div>
         </div>
 
         {/* Gender */}
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">الجنس *</label>
+          <label className="block text-sm font-medium text-foreground">
+            الجنس *
+          </label>
           <div className="flex gap-6">
-            <label className="flex items-center">
+            <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="radio"
-                name="gender"
                 value="male"
-                checked={data.gender === "male"}
-                onChange={(e) => handleInputChange('gender', e.target.value)}
-                className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                checked={watchedValues.gender === "male"}
+                onChange={(e) => setValue("gender", e.target.value as "male" | "female")}
+                className="w-4 h-4 text-primary border-border focus:ring-primary"
               />
-              <span className="mr-2 text-sm text-gray-700">ذكر</span>
+              <span className="text-sm text-foreground">ذكر</span>
             </label>
-            <label className="flex items-center">
+            <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="radio"
-                name="gender"
                 value="female"
-                checked={data.gender === "female"}
-                onChange={(e) => handleInputChange('gender', e.target.value)}
-                className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                checked={watchedValues.gender === "female"}
+                onChange={(e) => setValue("gender", e.target.value as "male" | "female")}
+                className="w-4 h-4 text-primary border-border focus:ring-primary"
               />
-              <span className="mr-2 text-sm text-gray-700">أنثى</span>
+              <span className="text-sm text-foreground">أنثى</span>
             </label>
           </div>
         </div>
 
         {/* Birth Date */}
         <div className="space-y-2">
-          <label htmlFor="birthDate" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="birthDate" className="block text-sm font-medium text-foreground">
             تاريخ الميلاد *
           </label>
           <input
             id="birthDate"
             type="date"
-            required
-            value={data.birthDate}
-            onChange={(e) => handleInputChange('birthDate', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            {...register("birthDate", { required: true })}
+            className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           />
         </div>
 
         {/* Country */}
         <div className="space-y-2">
-          <label htmlFor="country" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="country" className="block text-sm font-medium text-foreground">
             البلد *
           </label>
           <input
             id="country"
-            type="text"
-            required
-            value={data.country}
-            onChange={(e) => handleInputChange('country', e.target.value)}
+            {...register("country", { required: true })}
             placeholder="أدخل البلد"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           />
         </div>
 
         {/* City */}
         <div className="space-y-2">
-          <label htmlFor="city" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="city" className="block text-sm font-medium text-foreground">
             المدينة *
           </label>
           <input
             id="city"
-            type="text"
-            required
-            value={data.city}
-            onChange={(e) => handleInputChange('city', e.target.value)}
+            {...register("city", { required: true })}
             placeholder="أدخل المدينة"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           />
         </div>
 
         {/* Education Level */}
-        <div className="space-y-2 relative">
-          <label className="block text-sm font-medium text-gray-700">المستوى التعليمي *</label>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-foreground">
+            المستوى التعليمي *
+          </label>
           <div className="relative">
-            <button
-              type="button"
-              onClick={() => setShowEducationDropdown(!showEducationDropdown)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right bg-white flex items-center justify-between"
+            <select
+              value={watchedValues.educationLevel || ""}
+              onChange={(e) => setValue("educationLevel", e.target.value)}
+              className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent appearance-none"
             >
-              <span>
-                {data.educationLevel ? 
-                  EDUCATION_LEVELS.find(e => e.value === data.educationLevel)?.label :
-                  "اختر المستوى التعليمي"
-                }
-              </span>
-              <ChevronDown className="w-4 h-4" />
-            </button>
-            {showEducationDropdown && (
-              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
-                {EDUCATION_LEVELS.map((level) => (
-                  <button
-                    key={level.value}
-                    type="button"
-                    onClick={() => {
-                      handleInputChange('educationLevel', level.value);
-                      setShowEducationDropdown(false);
-                    }}
-                    className="w-full px-3 py-2 text-right hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg"
-                  >
-                    {level.label}
-                  </button>
-                ))}
-              </div>
-            )}
+              <option value="">اختر المستوى التعليمي</option>
+              {EDUCATION_LEVELS.map((level) => (
+                <option key={level.value} value={level.value}>
+                  {level.label}
+                </option>
+              ))}
+            </select>
+            <ChevronDown className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
           </div>
         </div>
 
         {/* Specialization */}
-        <div className="space-y-2 relative">
-          <label className="block text-sm font-medium text-gray-700">التخصص *</label>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-foreground">
+            التخصص *
+          </label>
           <div className="relative">
-            <button
-              type="button"
-              onClick={() => setShowSpecializationDropdown(!showSpecializationDropdown)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right bg-white flex items-center justify-between"
+            <select
+              value={watchedValues.specialization || ""}
+              onChange={(e) => setValue("specialization", e.target.value)}
+              className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent appearance-none"
             >
-              <span>
-                {data.specialization ? 
-                  SPECIALIZATIONS.find(s => s.value === data.specialization)?.label :
-                  "اختر التخصص"
-                }
-              </span>
-              <ChevronDown className="w-4 h-4" />
-            </button>
-            {showSpecializationDropdown && (
-              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
-                {SPECIALIZATIONS.map((spec) => (
-                  <button
-                    key={spec.value}
-                    type="button"
-                    onClick={() => {
-                      handleInputChange('specialization', spec.value);
-                      setShowSpecializationDropdown(false);
-                    }}
-                    className="w-full px-3 py-2 text-right hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg"
-                  >
-                    {spec.label}
-                  </button>
-                ))}
-              </div>
-            )}
+              <option value="">اختر التخصص</option>
+              {SPECIALIZATIONS.map((spec) => (
+                <option key={spec.value} value={spec.value}>
+                  {spec.label}
+                </option>
+              ))}
+            </select>
+            <ChevronDown className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
           </div>
         </div>
 
         {/* Experience Years */}
         <div className="space-y-2">
-          <label htmlFor="experienceYears" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="experienceYears" className="block text-sm font-medium text-foreground">
             عدد سنوات الخبرة
           </label>
           <input
@@ -277,10 +217,9 @@ const BasicInfoStep = ({ data, updateData }: BasicInfoStepProps) => {
             type="number"
             min="0"
             max="50"
-            value={data.experienceYears || ''}
-            onChange={(e) => handleInputChange('experienceYears', parseInt(e.target.value) || 0)}
+            {...register("experienceYears", { valueAsNumber: true })}
             placeholder="أدخل عدد سنوات الخبرة"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           />
         </div>
       </div>
