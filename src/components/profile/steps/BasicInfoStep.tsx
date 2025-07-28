@@ -1,16 +1,11 @@
 
-import { UseFormReturn } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import React, { useState } from "react";
 import { Upload, ChevronDown } from "lucide-react";
 import { ProfileData } from "../ProfileBuilder";
 
 interface BasicInfoStepProps {
-  form: UseFormReturn<ProfileData>;
+  data: ProfileData;
+  updateData: (newData: Partial<ProfileData>) => void;
 }
 
 const NATIONALITIES = [
@@ -41,176 +36,251 @@ const SPECIALIZATIONS = [
   { value: "other", label: "أخرى" }
 ];
 
-const BasicInfoStep = ({ form }: BasicInfoStepProps) => {
-  const { register, watch, setValue } = form;
-  const watchedValues = watch();
+const BasicInfoStep = ({ data, updateData }: BasicInfoStepProps) => {
+  const [showNationalityDropdown, setShowNationalityDropdown] = useState(false);
+  const [showEducationDropdown, setShowEducationDropdown] = useState(false);
+  const [showSpecializationDropdown, setShowSpecializationDropdown] = useState(false);
+
+  const handleInputChange = (field: keyof ProfileData, value: any) => {
+    updateData({ [field]: value });
+  };
 
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Identity ID */}
         <div className="space-y-2">
-          <Label htmlFor="identityId">رقم الهوية *</Label>
-          <Input
+          <label htmlFor="identityId" className="block text-sm font-medium text-gray-700">
+            رقم الهوية *
+          </label>
+          <input
             id="identityId"
-            {...register("identityId", { required: true })}
+            type="text"
+            required
+            value={data.identityId}
+            onChange={(e) => handleInputChange('identityId', e.target.value)}
             placeholder="أدخل رقم الهوية"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
 
         {/* Identity Image Upload */}
         <div className="space-y-2">
-          <Label>صورة الهوية *</Label>
-          <Card className="border-dashed border-2 border-primary/20 hover:border-primary/40 transition-colors">
-            <CardContent className="flex flex-col items-center justify-center p-6">
-              <Upload className="w-8 h-8 text-muted-foreground mb-2" />
-              <p className="text-sm text-muted-foreground text-center">
+          <label className="block text-sm font-medium text-gray-700">صورة الهوية *</label>
+          <div className="border-2 border-dashed border-blue-200 hover:border-blue-400 transition-colors rounded-lg">
+            <div className="flex flex-col items-center justify-center p-6">
+              <Upload className="w-8 h-8 text-gray-400 mb-2" />
+              <p className="text-sm text-gray-500 text-center">
                 اسحب الملف هنا أو اضغط للرفع
               </p>
-              <Button variant="outline" size="sm" className="mt-2">
+              <button className="mt-2 px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
                 اختر ملف
-              </Button>
-            </CardContent>
-          </Card>
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Nationality */}
-        <div className="space-y-2">
-          <Label>الجنسية *</Label>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="w-full justify-between">
-                {watchedValues.nationality ? 
-                  NATIONALITIES.find(n => n.value === watchedValues.nationality)?.label :
+        <div className="space-y-2 relative">
+          <label className="block text-sm font-medium text-gray-700">الجنسية *</label>
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setShowNationalityDropdown(!showNationalityDropdown)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right bg-white flex items-center justify-between"
+            >
+              <span>
+                {data.nationality ? 
+                  NATIONALITIES.find(n => n.value === data.nationality)?.label :
                   "اختر الجنسية"
                 }
-                <ChevronDown className="w-4 h-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-full">
-              {NATIONALITIES.map((nationality) => (
-                <DropdownMenuItem
-                  key={nationality.value}
-                  onClick={() => setValue("nationality", nationality.value)}
-                >
-                  {nationality.label}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </span>
+              <ChevronDown className="w-4 h-4" />
+            </button>
+            {showNationalityDropdown && (
+              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+                {NATIONALITIES.map((nationality) => (
+                  <button
+                    key={nationality.value}
+                    type="button"
+                    onClick={() => {
+                      handleInputChange('nationality', nationality.value);
+                      setShowNationalityDropdown(false);
+                    }}
+                    className="w-full px-3 py-2 text-right hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg"
+                  >
+                    {nationality.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Gender */}
         <div className="space-y-2">
-          <Label>الجنس *</Label>
-          <RadioGroup
-            value={watchedValues.gender}
-            onValueChange={(value) => setValue("gender", value as "male" | "female")}
-            className="flex gap-6"
-          >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="male" id="male" />
-              <Label htmlFor="male">ذكر</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="female" id="female" />
-              <Label htmlFor="female">أنثى</Label>
-            </div>
-          </RadioGroup>
+          <label className="block text-sm font-medium text-gray-700">الجنس *</label>
+          <div className="flex gap-6">
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="gender"
+                value="male"
+                checked={data.gender === "male"}
+                onChange={(e) => handleInputChange('gender', e.target.value)}
+                className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+              />
+              <span className="mr-2 text-sm text-gray-700">ذكر</span>
+            </label>
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="gender"
+                value="female"
+                checked={data.gender === "female"}
+                onChange={(e) => handleInputChange('gender', e.target.value)}
+                className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+              />
+              <span className="mr-2 text-sm text-gray-700">أنثى</span>
+            </label>
+          </div>
         </div>
 
         {/* Birth Date */}
         <div className="space-y-2">
-          <Label htmlFor="birthDate">تاريخ الميلاد *</Label>
-          <Input
+          <label htmlFor="birthDate" className="block text-sm font-medium text-gray-700">
+            تاريخ الميلاد *
+          </label>
+          <input
             id="birthDate"
             type="date"
-            {...register("birthDate", { required: true })}
+            required
+            value={data.birthDate}
+            onChange={(e) => handleInputChange('birthDate', e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
 
         {/* Country */}
         <div className="space-y-2">
-          <Label htmlFor="country">البلد *</Label>
-          <Input
+          <label htmlFor="country" className="block text-sm font-medium text-gray-700">
+            البلد *
+          </label>
+          <input
             id="country"
-            {...register("country", { required: true })}
+            type="text"
+            required
+            value={data.country}
+            onChange={(e) => handleInputChange('country', e.target.value)}
             placeholder="أدخل البلد"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
 
         {/* City */}
         <div className="space-y-2">
-          <Label htmlFor="city">المدينة *</Label>
-          <Input
+          <label htmlFor="city" className="block text-sm font-medium text-gray-700">
+            المدينة *
+          </label>
+          <input
             id="city"
-            {...register("city", { required: true })}
+            type="text"
+            required
+            value={data.city}
+            onChange={(e) => handleInputChange('city', e.target.value)}
             placeholder="أدخل المدينة"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
 
         {/* Education Level */}
-        <div className="space-y-2">
-          <Label>المستوى التعليمي *</Label>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="w-full justify-between">
-                {watchedValues.educationLevel ? 
-                  EDUCATION_LEVELS.find(e => e.value === watchedValues.educationLevel)?.label :
+        <div className="space-y-2 relative">
+          <label className="block text-sm font-medium text-gray-700">المستوى التعليمي *</label>
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setShowEducationDropdown(!showEducationDropdown)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right bg-white flex items-center justify-between"
+            >
+              <span>
+                {data.educationLevel ? 
+                  EDUCATION_LEVELS.find(e => e.value === data.educationLevel)?.label :
                   "اختر المستوى التعليمي"
                 }
-                <ChevronDown className="w-4 h-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-full">
-              {EDUCATION_LEVELS.map((level) => (
-                <DropdownMenuItem
-                  key={level.value}
-                  onClick={() => setValue("educationLevel", level.value)}
-                >
-                  {level.label}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </span>
+              <ChevronDown className="w-4 h-4" />
+            </button>
+            {showEducationDropdown && (
+              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+                {EDUCATION_LEVELS.map((level) => (
+                  <button
+                    key={level.value}
+                    type="button"
+                    onClick={() => {
+                      handleInputChange('educationLevel', level.value);
+                      setShowEducationDropdown(false);
+                    }}
+                    className="w-full px-3 py-2 text-right hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg"
+                  >
+                    {level.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Specialization */}
-        <div className="space-y-2">
-          <Label>التخصص *</Label>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="w-full justify-between">
-                {watchedValues.specialization ? 
-                  SPECIALIZATIONS.find(s => s.value === watchedValues.specialization)?.label :
+        <div className="space-y-2 relative">
+          <label className="block text-sm font-medium text-gray-700">التخصص *</label>
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setShowSpecializationDropdown(!showSpecializationDropdown)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right bg-white flex items-center justify-between"
+            >
+              <span>
+                {data.specialization ? 
+                  SPECIALIZATIONS.find(s => s.value === data.specialization)?.label :
                   "اختر التخصص"
                 }
-                <ChevronDown className="w-4 h-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-full">
-              {SPECIALIZATIONS.map((spec) => (
-                <DropdownMenuItem
-                  key={spec.value}
-                  onClick={() => setValue("specialization", spec.value)}
-                >
-                  {spec.label}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </span>
+              <ChevronDown className="w-4 h-4" />
+            </button>
+            {showSpecializationDropdown && (
+              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+                {SPECIALIZATIONS.map((spec) => (
+                  <button
+                    key={spec.value}
+                    type="button"
+                    onClick={() => {
+                      handleInputChange('specialization', spec.value);
+                      setShowSpecializationDropdown(false);
+                    }}
+                    className="w-full px-3 py-2 text-right hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg"
+                  >
+                    {spec.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Experience Years */}
         <div className="space-y-2">
-          <Label htmlFor="experienceYears">عدد سنوات الخبرة</Label>
-          <Input
+          <label htmlFor="experienceYears" className="block text-sm font-medium text-gray-700">
+            عدد سنوات الخبرة
+          </label>
+          <input
             id="experienceYears"
             type="number"
             min="0"
             max="50"
-            {...register("experienceYears", { valueAsNumber: true })}
+            value={data.experienceYears || ''}
+            onChange={(e) => handleInputChange('experienceYears', parseInt(e.target.value) || 0)}
             placeholder="أدخل عدد سنوات الخبرة"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
       </div>

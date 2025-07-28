@@ -1,15 +1,11 @@
 
-import { UseFormReturn } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useState } from "react";
 import { ChevronDown, CreditCard, Shield } from "lucide-react";
 import { ProfileData } from "../ProfileBuilder";
 
 interface PaymentStepProps {
-  form: UseFormReturn<ProfileData>;
+  data: ProfileData;
+  updateData: (newData: Partial<ProfileData>) => void;
 }
 
 const MONTHS = [
@@ -32,9 +28,14 @@ const YEARS = Array.from({ length: 20 }, (_, i) => {
   return { value: year.toString(), label: year.toString() };
 });
 
-const PaymentStep = ({ form }: PaymentStepProps) => {
-  const { watch, setValue } = form;
-  const paymentInfo = watch("paymentInfo");
+const PaymentStep = ({ data, updateData }: PaymentStepProps) => {
+  const [showMonthDropdown, setShowMonthDropdown] = useState(false);
+  const [showYearDropdown, setShowYearDropdown] = useState(false);
+
+  const updatePaymentInfo = (field: string, value: string) => {
+    const newPaymentInfo = { ...data.paymentInfo, [field]: value };
+    updateData({ paymentInfo: newPaymentInfo });
+  };
 
   const formatCardNumber = (value: string) => {
     // Remove all non-digits
@@ -57,119 +58,143 @@ const PaymentStep = ({ form }: PaymentStepProps) => {
     <div className="space-y-6">
       <div className="text-center">
         <h3 className="text-lg font-semibold mb-2">بيانات الدفع البنكية</h3>
-        <p className="text-muted-foreground">أضف بيانات بطاقتك البنكية لاستلام المدفوعات (اختياري)</p>
+        <p className="text-gray-600">أضف بيانات بطاقتك البنكية لاستلام المدفوعات (اختياري)</p>
       </div>
 
-      <Card className="max-w-md mx-auto">
-        <CardHeader className="text-center">
-          <CardTitle className="flex items-center justify-center gap-2">
+      <div className="max-w-md mx-auto bg-white border border-gray-200 rounded-lg shadow-sm">
+        <div className="p-6 text-center border-b border-gray-200">
+          <div className="flex items-center justify-center gap-2 mb-2">
             <CreditCard className="w-5 h-5" />
-            معلومات البطاقة البنكية
-          </CardTitle>
-        </CardHeader>
+            <h4 className="text-lg font-semibold">معلومات البطاقة البنكية</h4>
+          </div>
+        </div>
         
-        <CardContent className="space-y-4">
+        <div className="p-6 space-y-4">
           {/* Card Holder Name */}
           <div className="space-y-2">
-            <Label htmlFor="cardName">الاسم على البطاقة</Label>
-            <Input
+            <label htmlFor="cardName" className="block text-sm font-medium text-gray-700">الاسم على البطاقة</label>
+            <input
               id="cardName"
+              type="text"
               placeholder="أدخل الاسم كما يظهر على البطاقة"
-              value={paymentInfo?.cardName || ""}
-              onChange={(e) => setValue("paymentInfo.cardName", e.target.value)}
+              value={data.paymentInfo?.cardName || ""}
+              onChange={(e) => updatePaymentInfo('cardName', e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
           {/* Card Number */}
           <div className="space-y-2">
-            <Label htmlFor="cardNumber">رقم البطاقة</Label>
-            <Input
+            <label htmlFor="cardNumber" className="block text-sm font-medium text-gray-700">رقم البطاقة</label>
+            <input
               id="cardNumber"
+              type="text"
               placeholder="1234 5678 9012 3456"
-              value={paymentInfo?.cardNumber || ""}
+              value={data.paymentInfo?.cardNumber || ""}
               onChange={(e) => {
                 const formatted = formatCardNumber(e.target.value);
-                setValue("paymentInfo.cardNumber", formatted);
+                updatePaymentInfo('cardNumber', formatted);
               }}
               maxLength={19}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
           <div className="grid grid-cols-3 gap-4">
             {/* CVV */}
             <div className="space-y-2">
-              <Label htmlFor="cvv">CVV</Label>
-              <Input
+              <label htmlFor="cvv" className="block text-sm font-medium text-gray-700">CVV</label>
+              <input
                 id="cvv"
+                type="text"
                 placeholder="123"
-                value={paymentInfo?.cvv || ""}
+                value={data.paymentInfo?.cvv || ""}
                 onChange={(e) => {
                   const value = e.target.value.replace(/\D/g, '').slice(0, 4);
-                  setValue("paymentInfo.cvv", value);
+                  updatePaymentInfo('cvv', value);
                 }}
                 maxLength={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
 
             {/* Expiry Month */}
-            <div className="space-y-2">
-              <Label>الشهر</Label>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="w-full justify-between">
-                    {paymentInfo?.expiryMonth || "شهر"}
-                    <ChevronDown className="w-4 h-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  {MONTHS.map((month) => (
-                    <DropdownMenuItem
-                      key={month.value}
-                      onClick={() => setValue("paymentInfo.expiryMonth", month.value)}
-                    >
-                      {month.label}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+            <div className="space-y-2 relative">
+              <label className="block text-sm font-medium text-gray-700">الشهر</label>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setShowMonthDropdown(!showMonthDropdown)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center bg-white flex items-center justify-between"
+                >
+                  <span>{data.paymentInfo?.expiryMonth || "شهر"}</span>
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+                {showMonthDropdown && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+                    {MONTHS.map((month) => (
+                      <button
+                        key={month.value}
+                        type="button"
+                        onClick={() => {
+                          updatePaymentInfo('expiryMonth', month.value);
+                          setShowMonthDropdown(false);
+                        }}
+                        className="w-full px-3 py-2 text-center hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg"
+                      >
+                        {month.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Expiry Year */}
-            <div className="space-y-2">
-              <Label>السنة</Label>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="w-full justify-between">
-                    {paymentInfo?.expiryYear || "سنة"}
-                    <ChevronDown className="w-4 h-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  {YEARS.map((year) => (
-                    <DropdownMenuItem
-                      key={year.value}
-                      onClick={() => setValue("paymentInfo.expiryYear", year.value)}
-                    >
-                      {year.label}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+            <div className="space-y-2 relative">
+              <label className="block text-sm font-medium text-gray-700">السنة</label>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setShowYearDropdown(!showYearDropdown)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center bg-white flex items-center justify-between"
+                >
+                  <span>{data.paymentInfo?.expiryYear || "سنة"}</span>
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+                {showYearDropdown && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                    {YEARS.map((year) => (
+                      <button
+                        key={year.value}
+                        type="button"
+                        onClick={() => {
+                          updatePaymentInfo('expiryYear', year.value);
+                          setShowYearDropdown(false);
+                        }}
+                        className="w-full px-3 py-2 text-center hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg"
+                      >
+                        {year.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
           {/* Security Notice */}
-          <div className="flex items-start gap-2 p-3 bg-muted/50 rounded-lg">
-            <Shield className="w-5 h-5 text-primary mt-0.5" />
+          <div className="flex items-start gap-2 p-3 bg-gray-50 rounded-lg">
+            <Shield className="w-5 h-5 text-blue-600 mt-0.5" />
             <div className="text-sm">
-              <p className="font-medium">آمان المعلومات</p>
-              <p className="text-muted-foreground">
+              <p className="font-medium text-gray-900">آمان المعلومات</p>
+              <p className="text-gray-600">
                 جميع بياناتك البنكية محمية بأعلى معايير الأمان والتشفير
               </p>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 };

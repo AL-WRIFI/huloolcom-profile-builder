@@ -1,16 +1,11 @@
 
-import { UseFormReturn, useFieldArray } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Card, CardContent } from "@/components/ui/card";
+import React, { useState } from "react";
 import { Plus, X, ChevronDown } from "lucide-react";
 import { ProfileData } from "../ProfileBuilder";
 
 interface LanguagesStepProps {
-  form: UseFormReturn<ProfileData>;
+  data: ProfileData;
+  updateData: (newData: Partial<ProfileData>) => void;
 }
 
 const LANGUAGES = [
@@ -31,128 +26,156 @@ const LANGUAGE_LEVELS = [
   { value: "native", label: "لغة أم" }
 ];
 
-const LanguagesStep = ({ form }: LanguagesStepProps) => {
-  const { control, watch, setValue } = form;
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "languages"
-  });
-
-  const watchedLanguages = watch("languages");
+const LanguagesStep = ({ data, updateData }: LanguagesStepProps) => {
+  const [dropdownStates, setDropdownStates] = useState<{[key: string]: boolean}>({});
 
   const addLanguage = () => {
-    append({
+    const newLanguages = [...data.languages, {
       language: "",
       level: "",
       isPrimary: false
-    });
+    }];
+    updateData({ languages: newLanguages });
+  };
+
+  const removeLanguage = (index: number) => {
+    const newLanguages = data.languages.filter((_, i) => i !== index);
+    updateData({ languages: newLanguages });
+  };
+
+  const updateLanguage = (index: number, field: string, value: any) => {
+    const newLanguages = [...data.languages];
+    newLanguages[index] = { ...newLanguages[index], [field]: value };
+    updateData({ languages: newLanguages });
+  };
+
+  const toggleDropdown = (key: string) => {
+    setDropdownStates(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
   return (
     <div className="space-y-6">
       <div className="text-center">
         <h3 className="text-lg font-semibold mb-2">اللغات التي تتقنها</h3>
-        <p className="text-muted-foreground">أضف اللغات التي تتقنها ومستوى إتقانك لكل لغة</p>
+        <p className="text-gray-600">أضف اللغات التي تتقنها ومستوى إتقانك لكل لغة</p>
       </div>
 
       <div className="space-y-4">
-        {fields.map((field, index) => (
-          <Card key={field.id} className="relative">
-            <CardContent className="p-4">
+        {data.languages.map((lang, index) => (
+          <div key={index} className="bg-white border border-gray-200 rounded-lg shadow-sm relative">
+            <div className="p-4">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {/* Language Selection */}
-                <div className="space-y-2">
-                  <Label>اللغة</Label>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="w-full justify-between">
-                        {watchedLanguages[index]?.language ? 
-                          LANGUAGES.find(l => l.value === watchedLanguages[index].language)?.label :
+                <div className="space-y-2 relative">
+                  <label className="block text-sm font-medium text-gray-700">اللغة</label>
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => toggleDropdown(`lang-${index}`)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right bg-white flex items-center justify-between"
+                    >
+                      <span>
+                        {lang.language ? 
+                          LANGUAGES.find(l => l.value === lang.language)?.label :
                           "اختر اللغة"
                         }
-                        <ChevronDown className="w-4 h-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      {LANGUAGES.map((language) => (
-                        <DropdownMenuItem
-                          key={language.value}
-                          onClick={() => setValue(`languages.${index}.language`, language.value)}
-                        >
-                          {language.label}
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                      </span>
+                      <ChevronDown className="w-4 h-4" />
+                    </button>
+                    {dropdownStates[`lang-${index}`] && (
+                      <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+                        {LANGUAGES.map((language) => (
+                          <button
+                            key={language.value}
+                            type="button"
+                            onClick={() => {
+                              updateLanguage(index, 'language', language.value);
+                              toggleDropdown(`lang-${index}`);
+                            }}
+                            className="w-full px-3 py-2 text-right hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg"
+                          >
+                            {language.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* Language Level */}
-                <div className="space-y-2">
-                  <Label>المستوى</Label>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="w-full justify-between">
-                        {watchedLanguages[index]?.level ? 
-                          LANGUAGE_LEVELS.find(l => l.value === watchedLanguages[index].level)?.label :
+                <div className="space-y-2 relative">
+                  <label className="block text-sm font-medium text-gray-700">المستوى</label>
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => toggleDropdown(`level-${index}`)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right bg-white flex items-center justify-between"
+                    >
+                      <span>
+                        {lang.level ? 
+                          LANGUAGE_LEVELS.find(l => l.value === lang.level)?.label :
                           "اختر المستوى"
                         }
-                        <ChevronDown className="w-4 h-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      {LANGUAGE_LEVELS.map((level) => (
-                        <DropdownMenuItem
-                          key={level.value}
-                          onClick={() => setValue(`languages.${index}.level`, level.value)}
-                        >
-                          {level.label}
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                      </span>
+                      <ChevronDown className="w-4 h-4" />
+                    </button>
+                    {dropdownStates[`level-${index}`] && (
+                      <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+                        {LANGUAGE_LEVELS.map((level) => (
+                          <button
+                            key={level.value}
+                            type="button"
+                            onClick={() => {
+                              updateLanguage(index, 'level', level.value);
+                              toggleDropdown(`level-${index}`);
+                            }}
+                            className="w-full px-3 py-2 text-right hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg"
+                          >
+                            {level.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* Primary Language */}
                 <div className="space-y-2 flex items-center">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id={`primary-${index}`}
-                      checked={watchedLanguages[index]?.isPrimary || false}
-                      onCheckedChange={(checked) => 
-                        setValue(`languages.${index}.isPrimary`, checked as boolean)
-                      }
+                  <label className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={lang.isPrimary}
+                      onChange={(e) => updateLanguage(index, 'isPrimary', e.target.checked)}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
-                    <Label htmlFor={`primary-${index}`}>لغة أساسية</Label>
-                  </div>
+                    <span className="mr-2 text-sm text-gray-700">لغة أساسية</span>
+                  </label>
                 </div>
 
                 {/* Remove Button */}
                 <div className="flex items-center justify-end">
-                  <Button
+                  <button
                     type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => remove(index)}
-                    className="text-destructive hover:text-destructive"
+                    onClick={() => removeLanguage(index)}
+                    className="text-red-600 hover:text-red-700 border border-red-300 rounded-lg p-2 hover:bg-red-50 transition-colors"
                   >
                     <X className="w-4 h-4" />
-                  </Button>
+                  </button>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         ))}
       </div>
 
-      <Button
+      <button
         type="button"
-        variant="outline"
         onClick={addLanguage}
-        className="w-full border-dashed border-2 hover:border-primary"
+        className="w-full border-2 border-dashed border-blue-300 hover:border-blue-500 text-blue-600 py-3 px-4 rounded-lg hover:bg-blue-50 transition-colors flex items-center justify-center gap-2"
       >
-        <Plus className="w-4 h-4 mr-2" />
+        <Plus className="w-4 h-4" />
         إضافة لغة جديدة
-      </Button>
+      </button>
     </div>
   );
 };
