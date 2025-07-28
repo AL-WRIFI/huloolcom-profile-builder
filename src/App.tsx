@@ -11,7 +11,6 @@ import Providers from "./pages/Providers";
 import Services from "./pages/Services";
 import ServiceRequest from "./pages/ServiceRequest";
 import ProviderProfile from "./pages/ProviderProfile";
-import ProviderDashboard from "./pages/ProviderDashboard";
 import ServiceDetails from "./pages/ServiceDetails";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -30,7 +29,6 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/provider-dashboard" element={<ProviderDashboard />} />
           <Route path="/providers" element={<Providers />} />
           <Route path="/providers/:id" element={<ProviderProfile />} />
           <Route path="/services" element={<Services />} />
