@@ -1,5 +1,8 @@
 
 import { FileText, Shield, Users, Scale, Eye, AlertCircle } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import Header from "@/components/layout/Header";
 
 const Terms = () => {
   const sections = [
@@ -66,47 +69,24 @@ const Terms = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
-      {/* Header */}
-      <header className="bg-white/80 backdrop-blur-md border-b border-gray-200/50 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Huloolcom
-              </div>
-            </div>
-            <nav className="hidden md:flex items-center space-x-8">
-              <a href="/" className="text-gray-700 hover:text-blue-600 transition-colors">الرئيسية</a>
-              <a href="/services" className="text-gray-700 hover:text-blue-600 transition-colors">الخدمات</a>
-              <a href="/about" className="text-gray-700 hover:text-blue-600 transition-colors">من نحن</a>
-              <a href="/contact" className="text-gray-700 hover:text-blue-600 transition-colors">تواصل معنا</a>
-            </nav>
-            <div className="flex items-center space-x-4">
-              <a href="/login" className="text-gray-700 hover:text-blue-600 transition-colors">تسجيل الدخول</a>
-              <a href="/register" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-600 text-white hover:bg-blue-700 h-10 px-4 py-2">
-                إنشاء حساب
-              </a>
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
+      <Header />
       
       {/* Hero Section */}
-      <section className="relative py-20 px-4 bg-gradient-to-r from-blue-600/10 via-white to-purple-600/10 overflow-hidden">
+      <section className="relative py-20 px-4 bg-gradient-to-r from-primary/10 via-background to-primary/5 overflow-hidden">
         <div className="absolute inset-0 -z-10">
-          <div className="absolute top-10 left-10 w-32 h-32 bg-blue-600/10 rounded-full blur-xl animate-pulse"></div>
-          <div className="absolute bottom-10 right-10 w-48 h-48 bg-blue-600/5 rounded-full blur-2xl animate-pulse delay-1000"></div>
+          <div className="absolute top-10 left-10 w-32 h-32 bg-primary/10 rounded-full blur-xl animate-pulse"></div>
+          <div className="absolute bottom-10 right-10 w-48 h-48 bg-primary/5 rounded-full blur-2xl animate-pulse delay-1000"></div>
         </div>
         
         <div className="container mx-auto text-center">
-          <div className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm animate-scale-in">
+          <Badge className="mb-6 px-4 py-2 text-sm animate-scale-in">
             📋 شروط وأحكام الاستخدام
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 animate-fade-in">
+          </Badge>
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6 animate-fade-in">
             الشروط والأحكام
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed animate-fade-in">
+          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed animate-fade-in">
             يرجى قراءة هذه الشروط والأحكام بعناية قبل استخدام منصة Huloolcom. 
             باستخدامك للمنصة، فإنك توافق على الالتزام بهذه الشروط
           </p>
@@ -122,73 +102,77 @@ const Terms = () => {
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto space-y-8">
           {sections.map((section, index) => (
-            <div key={index} className="rounded-lg border border-gray-200 bg-white text-gray-900 shadow-sm shadow-lg bg-white/80 backdrop-blur-sm hover:shadow-xl transition-all duration-300 animate-fade-in" style={{animationDelay: `${index * 150}ms`}}>
-              <div className="flex flex-col space-y-1.5 p-6">
+            <Card 
+              key={index} 
+              className="shadow-lg border-0 bg-white/80 backdrop-blur-sm hover:shadow-xl transition-all duration-300 animate-fade-in"
+              style={{animationDelay: `${index * 150}ms`}}
+            >
+              <CardHeader>
                 <div className="flex items-center gap-4">
-                  <div className="bg-blue-50 p-3 rounded-full">
-                    <section.icon className="h-6 w-6 text-blue-600" />
+                  <div className="bg-primary/10 p-3 rounded-full">
+                    <section.icon className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900">
+                  <CardTitle className="text-xl font-bold text-foreground">
                     {section.title}
-                  </h3>
+                  </CardTitle>
                 </div>
-              </div>
-              <div className="p-6 pt-0">
+              </CardHeader>
+              <CardContent>
                 <ul className="space-y-3">
                   {section.content.map((item, itemIndex) => (
                     <li key={itemIndex} className="flex items-start gap-3">
-                      <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
-                      <p className="text-gray-600 leading-relaxed">{item}</p>
+                      <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                      <p className="text-muted-foreground leading-relaxed">{item}</p>
                     </li>
                   ))}
                 </ul>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
 
         {/* Important Notice */}
-        <div className="max-w-4xl mx-auto mt-12 rounded-lg border border-gray-200 bg-white text-gray-900 shadow-sm bg-blue-50 border-blue-200 shadow-lg">
-          <div className="p-6">
+        <Card className="max-w-4xl mx-auto mt-12 bg-primary/5 border-primary/20 shadow-lg">
+          <CardContent className="pt-6">
             <div className="flex items-start gap-4">
-              <AlertCircle className="h-6 w-6 text-blue-600 flex-shrink-0 mt-1" />
+              <AlertCircle className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
               <div>
-                <h3 className="font-bold text-gray-900 mb-2">ملاحظة مهمة</h3>
-                <p className="text-gray-600 leading-relaxed">
+                <h3 className="font-bold text-foreground mb-2">ملاحظة مهمة</h3>
+                <p className="text-muted-foreground leading-relaxed">
                   تحتفظ منصة Huloolcom بالحق في تعديل هذه الشروط والأحكام في أي وقت. 
                   سيتم إشعار المستخدمين بأي تغييرات مهمة عبر البريد الإلكتروني أو الإشعارات على المنصة. 
                   استمرارك في استخدام المنصة بعد تعديل الشروط يعني موافقتك على الشروط الجديدة.
                 </p>
               </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
         {/* Contact for Questions */}
         <div className="text-center mt-12">
-          <div className="max-w-2xl mx-auto rounded-lg border border-gray-200 bg-white text-gray-900 shadow-sm bg-gradient-to-r from-blue-50 to-blue-50">
-            <div className="p-6">
-              <h3 className="font-bold text-gray-900 mb-4">هل لديك أسئلة حول الشروط والأحكام؟</h3>
-              <p className="text-gray-600 mb-4">
+          <Card className="max-w-2xl mx-auto bg-gradient-to-r from-primary/10 to-primary/5 border-0">
+            <CardContent className="pt-6">
+              <h3 className="font-bold text-foreground mb-4">هل لديك أسئلة حول الشروط والأحكام؟</h3>
+              <p className="text-muted-foreground mb-4">
                 إذا كان لديك أي استفسار حول هذه الشروط، لا تتردد في التواصل معنا
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a 
                   href="mailto:legal@huloolcom.com" 
-                  className="text-blue-600 hover:underline font-medium"
+                  className="text-primary hover:underline font-medium"
                 >
                   legal@huloolcom.com
                 </a>
-                <span className="text-gray-600 hidden sm:inline">|</span>
+                <span className="text-muted-foreground hidden sm:inline">|</span>
                 <a 
                   href="tel:+966123456789" 
-                  className="text-blue-600 hover:underline font-medium"
+                  className="text-primary hover:underline font-medium"
                 >
                   +966 12 345 6789
                 </a>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
