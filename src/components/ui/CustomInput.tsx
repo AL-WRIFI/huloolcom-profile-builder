@@ -2,6 +2,7 @@
 import React from 'react';
 
 interface CustomInputProps {
+  id?: string;
   type?: string;
   placeholder?: string;
   value?: string;
@@ -9,19 +10,24 @@ interface CustomInputProps {
   className?: string;
   disabled?: boolean;
   required?: boolean;
+  name?: string;
 }
 
 const CustomInput: React.FC<CustomInputProps> = ({
+  id,
   type = 'text',
   placeholder,
   value,
   onChange,
   className = '',
   disabled = false,
-  required = false
+  required = false,
+  name
 }) => {
   return (
     <input
+      id={id}
+      name={name}
       type={type}
       placeholder={placeholder}
       value={value}
