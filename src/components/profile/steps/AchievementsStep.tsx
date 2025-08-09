@@ -1,157 +1,159 @@
 
-import { UseFormReturn, useFieldArray } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import React, { useState } from "react";
 import { Plus, X, Upload, FileText } from "lucide-react";
 import { ProfileData } from "../ProfileBuilder";
 
 interface AchievementsStepProps {
-  form: UseFormReturn<ProfileData>;
+  data: ProfileData;
+  updateData: (newData: Partial<ProfileData>) => void;
 }
 
-const AchievementsStep = ({ form }: AchievementsStepProps) => {
-  const { control, watch, setValue } = form;
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "achievements"
-  });
-
-  const watchedAchievements = watch("achievements");
-
+const AchievementsStep = ({ data, updateData }: AchievementsStepProps) => {
   const addAchievement = () => {
-    append({
+    const newAchievements = [...data.achievements, {
       name: "",
       completionDate: new Date(),
       description: "",
       organization: "",
       attachments: []
-    });
+    }];
+    updateData({ achievements: newAchievements });
+  };
+
+  const removeAchievement = (index: number) => {
+    const newAchievements = data.achievements.filter((_, i) => i !== index);
+    updateData({ achievements: newAchievements });
+  };
+
+  const updateAchievement = (index: number, field: string, value: any) => {
+    const newAchievements = [...data.achievements];
+    newAchievements[index] = { ...newAchievements[index], [field]: value };
+    updateData({ achievements: newAchievements });
+  };
+
+  const removeAttachment = (achievementIndex: number, fileIndex: number) => {
+    const newAchievements = [...data.achievements];
+    const newAttachments = newAchievements[achievementIndex].attachments.filter((_, i) => i !== fileIndex);
+    newAchievements[achievementIndex] = { ...newAchievements[achievementIndex], attachments: newAttachments };
+    updateData({ achievements: newAchievements });
   };
 
   return (
     <div className="space-y-6">
       <div className="text-center">
         <h3 className="text-lg font-semibold mb-2">الأعمال والإنجازات</h3>
-        <p className="text-muted-foreground">أضف أعمالك وإنجازاتك السابقة ومشاريعك المميزة</p>
+        <p className="text-gray-600">أضف أعمالك وإنجازاتك السابقة ومشاريعك المميزة</p>
       </div>
 
       <div className="space-y-4">
-        {fields.map((field, index) => (
-          <Card key={field.id} className="relative">
-            <CardContent className="p-4">
+        {data.achievements.map((achievement, index) => (
+          <div key={index} className="bg-white border border-gray-200 rounded-lg shadow-sm relative">
+            <div className="p-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Achievement Name */}
                 <div className="space-y-2">
-                  <Label>اسم العمل/الإنجاز</Label>
-                  <Input
+                  <label className="block text-sm font-medium text-gray-700">اسم العمل/الإنجاز</label>
+                  <input
+                    type="text"
                     placeholder="أدخل اسم العمل أو الإنجاز"
-                    value={watchedAchievements[index]?.name || ""}
-                    onChange={(e) => setValue(`achievements.${index}.name`, e.target.value)}
+                    value={achievement.name}
+                    onChange={(e) => updateAchievement(index, 'name', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
 
                 {/* Completion Date */}
                 <div className="space-y-2">
-                  <Label>تاريخ الإنجاز</Label>
-                  <Input
+                  <label className="block text-sm font-medium text-gray-700">تاريخ الإنجاز</label>
+                  <input
                     type="date"
-                    value={watchedAchievements[index]?.completionDate ? 
-                      new Date(watchedAchievements[index].completionDate).toISOString().split('T')[0] : ""
-                    }
-                    onChange={(e) => setValue(`achievements.${index}.completionDate`, new Date(e.target.value))}
+                    value={achievement.completionDate ? new Date(achievement.completionDate).toISOString().split('T')[0] : ""}
+                    onChange={(e) => updateAchievement(index, 'completionDate', new Date(e.target.value))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
 
                 {/* Organization */}
                 <div className="space-y-2">
-                  <Label>جهة العمل/المؤسسة</Label>
-                  <Input
+                  <label className="block text-sm font-medium text-gray-700">جهة العمل/المؤسسة</label>
+                  <input
+                    type="text"
                     placeholder="أدخل اسم الجهة أو المؤسسة"
-                    value={watchedAchievements[index]?.organization || ""}
-                    onChange={(e) => setValue(`achievements.${index}.organization`, e.target.value)}
+                    value={achievement.organization}
+                    onChange={(e) => updateAchievement(index, 'organization', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
 
                 {/* Attachments Upload */}
                 <div className="space-y-2">
-                  <Label>المرفقات (اختياري)</Label>
-                  <Card className="border-dashed border-2 border-primary/20 hover:border-primary/40 transition-colors cursor-pointer">
-                    <CardContent className="flex items-center justify-center p-4">
+                  <label className="block text-sm font-medium text-gray-700">المرفقات (اختياري)</label>
+                  <div className="border-2 border-dashed border-blue-200 hover:border-blue-400 transition-colors cursor-pointer rounded-lg">
+                    <div className="flex items-center justify-center p-4">
                       <div className="text-center">
-                        <Upload className="w-6 h-6 text-muted-foreground mx-auto mb-1" />
-                        <p className="text-xs text-muted-foreground">رفع ملفات</p>
+                        <Upload className="w-6 h-6 text-gray-400 mx-auto mb-1" />
+                        <p className="text-xs text-gray-500">رفع ملفات</p>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Description */}
                 <div className="md:col-span-2 space-y-2">
-                  <Label>وصف الإنجاز</Label>
-                  <Textarea
+                  <label className="block text-sm font-medium text-gray-700">وصف الإنجاز</label>
+                  <textarea
                     placeholder="اكتب وصفاً تفصيلياً للإنجاز والمهارات المستخدمة..."
-                    value={watchedAchievements[index]?.description || ""}
-                    onChange={(e) => setValue(`achievements.${index}.description`, e.target.value)}
+                    value={achievement.description}
+                    onChange={(e) => updateAchievement(index, 'description', e.target.value)}
                     rows={4}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                   />
                 </div>
               </div>
 
               {/* Uploaded Files Display */}
-              {watchedAchievements[index]?.attachments && watchedAchievements[index].attachments.length > 0 && (
+              {achievement.attachments && achievement.attachments.length > 0 && (
                 <div className="mt-4">
-                  <Label className="text-sm font-medium">الملفات المرفقة:</Label>
+                  <label className="text-sm font-medium text-gray-700">الملفات المرفقة:</label>
                   <div className="flex flex-wrap gap-2 mt-2">
-                    {watchedAchievements[index].attachments.map((file: File, fileIndex: number) => (
-                      <Badge key={fileIndex} variant="secondary" className="flex items-center gap-2">
+                    {achievement.attachments.map((file, fileIndex) => (
+                      <div key={fileIndex} className="inline-flex items-center gap-2 bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
                         <FileText className="w-4 h-4" />
                         {file.name}
-                        <Button
+                        <button
                           type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => {
-                            const newAttachments = watchedAchievements[index].attachments.filter((_: any, i: number) => i !== fileIndex);
-                            setValue(`achievements.${index}.attachments`, newAttachments);
-                          }}
-                          className="h-4 w-4 p-0 hover:bg-destructive hover:text-destructive-foreground"
+                          onClick={() => removeAttachment(index, fileIndex)}
+                          className="text-red-600 hover:text-red-700"
                         >
                           <X className="w-3 h-3" />
-                        </Button>
-                      </Badge>
+                        </button>
+                      </div>
                     ))}
                   </div>
                 </div>
               )}
 
               {/* Remove Achievement */}
-              <Button
+              <button
                 type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => remove(index)}
-                className="absolute top-2 right-2 h-8 w-8 p-0 text-destructive"
+                onClick={() => removeAchievement(index)}
+                className="absolute top-2 right-2 text-red-600 hover:text-red-700 border border-red-300 rounded-lg p-2 hover:bg-red-50 transition-colors"
               >
                 <X className="w-4 h-4" />
-              </Button>
-            </CardContent>
-          </Card>
+              </button>
+            </div>
+          </div>
         ))}
       </div>
 
-      <Button
+      <button
         type="button"
-        variant="outline"
         onClick={addAchievement}
-        className="w-full border-dashed border-2 hover:border-primary"
+        className="w-full border-2 border-dashed border-blue-300 hover:border-blue-500 text-blue-600 py-3 px-4 rounded-lg hover:bg-blue-50 transition-colors flex items-center justify-center gap-2"
       >
-        <Plus className="w-4 h-4 mr-2" />
+        <Plus className="w-4 h-4" />
         إضافة إنجاز جديد
-      </Button>
+      </button>
     </div>
   );
 };

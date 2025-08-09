@@ -12,26 +12,25 @@ const ProgressBar = ({ currentStep, totalSteps, stepTitle, progress }: ProgressB
   const calculatedProgress = progress ?? (currentStep / totalSteps) * 100;
 
   return (
-    <div className="w-full bg-card shadow-sm border-b border-border py-4 px-6">
+    <div className="w-full bg-white shadow-sm border-b border-gray-200 py-4 px-6">
       <div className="container mx-auto">
         <div className="flex items-center justify-between mb-3">
           <div>
-            <h2 className="text-lg font-semibold text-foreground">
+            <h2 className="text-lg font-semibold text-gray-900">
               المرحلة {currentStep} من {totalSteps}
             </h2>
-            <p className="text-sm text-muted-foreground">{stepTitle}</p>
+            <p className="text-sm text-gray-600">{stepTitle}</p>
           </div>
-          <div className="text-sm font-medium text-primary">
+          <div className="text-sm font-medium text-blue-600">
             {Math.round(calculatedProgress)}% مكتمل
           </div>
         </div>
         
-        {/* Custom Progress Bar */}
-        <div className="w-full bg-muted rounded-full h-3 overflow-hidden transition-all duration-500 ease-out">
+        <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden transition-all duration-500 ease-out">
           <div 
-            className="bg-primary h-full rounded-full transition-all duration-500 ease-out"
+            className="bg-blue-600 h-full rounded-full transition-all duration-500 ease-out"
             style={{ width: `${calculatedProgress}%` }}
-          ></div>
+          />
         </div>
         
         {/* Step indicators */}
@@ -41,10 +40,10 @@ const ProgressBar = ({ currentStep, totalSteps, stepTitle, progress }: ProgressB
               key={index}
               className={`flex items-center justify-center w-8 h-8 rounded-full text-xs font-medium transition-all duration-300 ${
                 index + 1 <= currentStep
-                  ? "bg-primary text-primary-foreground scale-110"
+                  ? "bg-blue-600 text-white transform scale-110"
                   : index + 1 === currentStep + 1
-                  ? "bg-primary/20 text-primary border-2 border-primary animate-pulse"
-                  : "bg-muted text-muted-foreground"
+                  ? "bg-blue-100 text-blue-600 border-2 border-blue-600 animate-pulse"
+                  : "bg-gray-200 text-gray-500"
               }`}
             >
               {index + 1}
