@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { CheckCircle, User, Languages, FileText, Briefcase, Award, MessageSquare, CreditCard } from "lucide-react";
 import BasicInfoStep from "./steps/BasicInfoStep";
 import LanguagesStep from "./steps/LanguagesStep";
@@ -75,21 +76,16 @@ export interface ProfileData {
 const ProfileBuilder = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
-  const [profileData, setProfileData] = useState<ProfileData>({
-    identityId: "",
-    nationality: "",
-    gender: "male",
-    birthDate: "",
-    country: "",
-    city: "",
-    educationLevel: "",
-    specialization: "",
-    languages: [],
-    documents: [],
-    services: [],
-    achievements: [],
-    socialLinks: [],
-    biography: "",
+
+  const form = useForm<ProfileData>({
+    defaultValues: {
+      languages: [],
+      documents: [],
+      services: [],
+      achievements: [],
+      socialLinks: [],
+      biography: "",
+    }
   });
 
   const steps = [
@@ -126,30 +122,26 @@ const ProfileBuilder = () => {
     setCurrentStep(stepId);
   };
 
-  const updateProfileData = (newData: Partial<ProfileData>) => {
-    setProfileData(prev => ({ ...prev, ...newData }));
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-white border-b sticky top-0 z-10">
+      <div className="bg-card border-b sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">إعداد ملفك الشخصي</h1>
-              <p className="text-gray-600">أكمل ملفك الشخصي لتصبح مزود خدمات معتمد</p>
+              <h1 className="text-2xl font-bold text-foreground">إعداد ملفك الشخصي</h1>
+              <p className="text-muted-foreground">أكمل ملفك الشخصي لتصبح مزود خدمات معتمد</p>
             </div>
             <div className="text-right">
-              <div className="text-sm text-gray-600 mb-1">نسبة الإكمال</div>
+              <div className="text-sm text-muted-foreground mb-1">نسبة الإكمال</div>
               <div className="flex items-center gap-3">
-                <div className="w-32 bg-gray-200 rounded-full h-2">
+                <div className="w-32 bg-muted rounded-full h-2 overflow-hidden">
                   <div 
-                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                    className="bg-primary h-full rounded-full transition-all duration-300"
                     style={{ width: `${progressPercentage}%` }}
-                  />
+                  ></div>
                 </div>
-                <span className="font-medium text-blue-600">{Math.round(progressPercentage)}%</span>
+                <span className="font-medium text-primary">{Math.round(progressPercentage)}%</span>
               </div>
             </div>
           </div>
@@ -160,73 +152,71 @@ const ProfileBuilder = () => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Side Navigation */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 sticky top-24">
-              <div className="p-6">
-                <div className="space-y-3">
-                  {steps.map((step) => {
-                    const IconComponent = step.icon;
-                    const isCompleted = completedSteps.includes(step.id);
-                    const isCurrent = currentStep === step.id;
-                    const isAccessible = step.id <= currentStep || isCompleted;
+            <div className="bg-card rounded-xl border border-border shadow-lg p-6 sticky top-24">
+              <div className="space-y-3">
+                {steps.map((step) => {
+                  const IconComponent = step.icon;
+                  const isCompleted = completedSteps.includes(step.id);
+                  const isCurrent = currentStep === step.id;
+                  const isAccessible = step.id <= currentStep || isCompleted;
 
-                    return (
-                      <div
-                        key={step.id}
-                        className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all ${
-                          isCurrent
-                            ? "bg-blue-50 border border-blue-200"
-                            : isCompleted
-                            ? "bg-green-50 hover:bg-green-100"
-                            : isAccessible
-                            ? "hover:bg-gray-50"
-                            : "opacity-50 cursor-not-allowed"
-                        }`}
-                        onClick={() => isAccessible && handleStepClick(step.id)}
-                      >
-                        <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-                          isCompleted
-                            ? "bg-green-500 text-white"
-                            : isCurrent
-                            ? "bg-blue-600 text-white"
-                            : "bg-gray-200 text-gray-500"
-                        }`}>
-                          {isCompleted ? (
-                            <CheckCircle className="w-4 h-4" />
-                          ) : (
-                            <IconComponent className="w-4 h-4" />
-                          )}
-                        </div>
-                        
-                        <div className="flex-1 min-w-0">
-                          <div className={`text-sm font-medium truncate ${
-                            isCurrent
-                              ? "text-blue-600"
-                              : isCompleted
-                              ? "text-green-700"
-                              : "text-gray-900"
-                          }`}>
-                            {step.name}
-                          </div>
-                          {isCurrent && (
-                            <div className="text-xs text-gray-500">
-                              الخطوة {step.id} من {steps.length}
-                            </div>
-                          )}
-                        </div>
+                  return (
+                    <div
+                      key={step.id}
+                      className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all ${
+                        isCurrent
+                          ? "bg-primary/10 border border-primary/20"
+                          : isCompleted
+                          ? "bg-green-50 hover:bg-green-100"
+                          : isAccessible
+                          ? "hover:bg-muted/50"
+                          : "opacity-50 cursor-not-allowed"
+                      }`}
+                      onClick={() => isAccessible && handleStepClick(step.id)}
+                    >
+                      <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+                        isCompleted
+                          ? "bg-green-500 text-white"
+                          : isCurrent
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted text-muted-foreground"
+                      }`}>
+                        {isCompleted ? (
+                          <CheckCircle className="w-4 h-4" />
+                        ) : (
+                          <IconComponent className="w-4 h-4" />
+                        )}
                       </div>
-                    );
-                  })}
-                </div>
+                      
+                      <div className="flex-1 min-w-0">
+                        <div className={`text-sm font-medium truncate ${
+                          isCurrent
+                            ? "text-primary"
+                            : isCompleted
+                            ? "text-green-700"
+                            : "text-foreground"
+                        }`}>
+                          {step.name}
+                        </div>
+                        {isCurrent && (
+                          <div className="text-xs text-muted-foreground">
+                            الخطوة {step.id} من {steps.length}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
 
-                {/* Progress Summary */}
-                <div className="mt-6 pt-4 border-t">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-blue-600 mb-1">
-                      {completedSteps.length}/{steps.length}
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      خطوات مكتملة
-                    </div>
+              {/* Progress Summary */}
+              <div className="mt-6 pt-4 border-t border-border">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-primary mb-1">
+                    {completedSteps.length}/{steps.length}
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    خطوات مكتملة
                   </div>
                 </div>
               </div>
@@ -235,51 +225,46 @@ const ProfileBuilder = () => {
 
           {/* Main Content */}
           <div className="lg:col-span-3">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 min-h-[600px]">
+            <div className="bg-card rounded-xl border border-border shadow-lg min-h-[600px]">
               <div className="p-8">
                 {/* Step Header */}
                 <div className="mb-8">
                   <div className="flex items-center gap-4 mb-4">
                     {currentStepData && (
                       <>
-                        <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center">
-                          <currentStepData.icon className="w-6 h-6 text-blue-600" />
+                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                          <currentStepData.icon className="w-6 h-6 text-primary" />
                         </div>
                         <div>
-                          <h2 className="text-2xl font-bold text-gray-900">
+                          <h2 className="text-2xl font-bold text-foreground">
                             {currentStepData.name}
                           </h2>
-                          <p className="text-gray-600">
+                          <p className="text-muted-foreground">
                             الخطوة {currentStep} من {steps.length}
                           </p>
                         </div>
                       </>
                     )}
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
                     <div 
-                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                      className="bg-primary h-full rounded-full transition-all duration-300"
                       style={{ width: `${(currentStep / steps.length) * 100}%` }}
-                    />
+                    ></div>
                   </div>
                 </div>
 
                 {/* Step Component */}
                 <div className="mb-8">
-                  {CurrentStepComponent && (
-                    <CurrentStepComponent 
-                      data={profileData} 
-                      updateData={updateProfileData} 
-                    />
-                  )}
+                  {CurrentStepComponent && <CurrentStepComponent form={form} />}
                 </div>
 
                 {/* Navigation Buttons */}
-                <div className="flex justify-between pt-6 border-t">
+                <div className="flex justify-between pt-6 border-t border-border">
                   <button
                     onClick={handlePrevious}
                     disabled={currentStep === 1}
-                    className="px-8 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="px-8 py-2 border border-border bg-background text-foreground rounded-lg hover:bg-muted/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     السابق
                   </button>
@@ -288,14 +273,14 @@ const ProfileBuilder = () => {
                     {currentStep < steps.length ? (
                       <button 
                         onClick={handleNext} 
-                        className="px-8 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                        className="px-8 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
                       >
                         التالي
                       </button>
                     ) : (
                       <button 
                         onClick={handleNext} 
-                        className="px-8 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                        className="px-8 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
                       >
                         إنهاء الإعداد
                       </button>
