@@ -1,6 +1,8 @@
+
+
 import React, { useState } from 'react';
 import { EducationalRequest, EducationalRequestStatus, Project, Attachment, RequestActivityLog, RequestActivityType, PaymentStatus, FulfillmentStatus, PricingType, User } from '../types';
-import { ViewType } from '../App';
+import { ViewType } from '../types';
 import StatusUpdateModal from './StatusUpdateModal';
 import { AcademicCapIcon, BriefcaseIcon, ChatBubbleLeftRightIcon, CheckBadgeIcon, ClipboardListIcon, CreditCardIcon, DocumentTextIcon, DollarSignIcon, EditIcon, LightBulbIcon, MapPinIcon, PaperclipIcon, PhoneIcon, PlusIcon, SendIcon, ArrowLeftIcon, BookOpenIcon, LinkIcon, UserCheckIcon, ClockIcon } from './Icons';
 
@@ -206,7 +208,7 @@ const RequestDetailView: React.FC<RequestDetailViewProps> = (props) => {
                     <button onClick={() => navigateTo('educationalRequests')} className="flex items-center text-sm text-blue-600 dark:text-blue-500 hover:underline mb-2">
                         <ArrowLeftIcon className="w-4 h-4 me-1"/> العودة إلى الطلبات
                     </button>
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{request.title}</h1>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">{request.title}</h1>
                 </div>
 
                 <div className="flex flex-col lg:flex-row-reverse gap-8">
@@ -214,9 +216,9 @@ const RequestDetailView: React.FC<RequestDetailViewProps> = (props) => {
                     <aside className="lg:w-1/3 w-full space-y-6 lg:sticky lg:top-8 flex-shrink-0">
                         <InfoCard title="حالة الطلب" icon={<ClipboardListIcon className="w-6 h-6"/>}>
                            <div className="space-y-3">
-                                <div className="flex items-center justify-between"><span className="text-sm font-semibold">حالة الطلب:</span> <div className="flex gap-1">{Object.values(EducationalRequestStatus).map(s => <button key={s} onClick={() => s !== request.status && handleStatusChange('request', s)} className={`px-2 py-0.5 text-xs font-bold rounded-md ${request.status === s ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'}`}>{s}</button>)}</div></div>
-                                <div className="flex items-center justify-between"><span className="text-sm font-semibold">حالة الدفع:</span> <div className="flex gap-1">{Object.values(PaymentStatus).map(s => <button key={s} onClick={() => s !== request.paymentStatus && handleStatusChange('payment', s)} className={`px-2 py-0.5 text-xs font-bold rounded-md ${request.paymentStatus === s ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'}`}>{s}</button>)}</div></div>
-                                <div className="flex items-center justify-between"><span className="text-sm font-semibold">حالة الإنجاز:</span> <div className="flex gap-1">{Object.values(FulfillmentStatus).map(s => <button key={s} onClick={() => s !== request.fulfillmentStatus && handleStatusChange('fulfillment', s)} className={`px-2 py-0.5 text-xs font-bold rounded-md ${request.fulfillmentStatus === s ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'}`}>{s}</button>)}</div></div>
+                                <div className="flex items-center justify-between"><span className="text-sm font-semibold">حالة الطلب:</span> <div className="flex flex-wrap gap-1 justify-end">{Object.values(EducationalRequestStatus).map(s => <button key={s} onClick={() => s !== request.status && handleStatusChange('request', s)} className={`px-2 py-0.5 text-xs font-bold rounded-md ${request.status === s ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'}`}>{s}</button>)}</div></div>
+                                <div className="flex items-center justify-between"><span className="text-sm font-semibold">حالة الدفع:</span> <div className="flex flex-wrap gap-1 justify-end">{Object.values(PaymentStatus).map(s => <button key={s} onClick={() => s !== request.paymentStatus && handleStatusChange('payment', s)} className={`px-2 py-0.5 text-xs font-bold rounded-md ${request.paymentStatus === s ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'}`}>{s}</button>)}</div></div>
+                                <div className="flex items-center justify-between"><span className="text-sm font-semibold">حالة الإنجاز:</span> <div className="flex flex-wrap gap-1 justify-end">{Object.values(FulfillmentStatus).map(s => <button key={s} onClick={() => s !== request.fulfillmentStatus && handleStatusChange('fulfillment', s)} className={`px-2 py-0.5 text-xs font-bold rounded-md ${request.fulfillmentStatus === s ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'}`}>{s}</button>)}</div></div>
                            </div>
                         </InfoCard>
 

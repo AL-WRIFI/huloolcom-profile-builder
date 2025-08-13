@@ -2,7 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { Project, ProjectStatus, ProjectCreationType, Educator, Bid, User, EducationalRequest } from '../types';
 import { PlusIcon, EyeIcon, FilterIcon, SearchIcon, TrashIcon, LockClosedIcon, LockOpenIcon, FileTextIcon, ViewGridIcon, ViewListIcon } from './Icons';
-import { ViewType } from '../App';
+import { ViewType } from '../types';
 import ConfirmationModal from './ConfirmationModal';
 
 interface ProjectsViewProps {
@@ -217,7 +217,7 @@ const ProjectsView: React.FC<ProjectsViewProps> = ({ navigateTo, projects, bids,
       <div className="animate-fade-in">
         <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">إدارة المشاريع</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">إدارة المشاريع</h1>
             <p className="text-gray-500 dark:text-gray-400">{filteredProjects.length} مشروع مطابق للمعايير</p>
           </div>
            <div className="flex items-center gap-2">

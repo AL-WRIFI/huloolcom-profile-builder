@@ -1,5 +1,15 @@
 
-import { ViewType } from "./App";
+export type ViewType = 
+  'dashboard' | 
+  'projects' | 'projectDetail' | 'createProject' | 
+  'educators' | 'educatorApplications' | 'educatorApplicationDetail' | 'rejectedEducators' |
+  'users' | 'userDetail' |
+  'educationalRequests' | 'requestDetail' |
+  'bidDetail' | 'taskDetail' | 
+  'finance' | 'invoiceDetail' |
+  'reports' |
+  'calendar' |
+  'settings';
 
 export enum ProjectType {
   PUBLIC = 'عام',

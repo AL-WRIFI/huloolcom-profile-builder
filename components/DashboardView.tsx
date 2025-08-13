@@ -1,9 +1,8 @@
 
-
 import React from 'react';
 import { Project, Educator, Bid, Activity, ProjectStatus, BidStatus, PricedBidTask, EducatorStatus } from '../types';
 import { ProjectsIcon, BidsIcon, EducatorsIcon, CheckCircleIcon, ClockIcon, TrendingUpIcon, DollarSignIcon, AcademicCapIcon } from './Icons';
-import { ViewType } from '../App';
+import { ViewType } from '../types';
 
 
 interface DashboardViewProps {
@@ -67,7 +66,7 @@ const DashboardView: React.FC<DashboardViewProps> = ({ navigateTo, projects, bid
   
   return (
     <div className="animate-fade-in">
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">لوحة التحكم</h1>
+      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">لوحة التحكم</h1>
       <p className="text-gray-500 dark:text-gray-400 mb-6">نظرة عامة على أداء المنصة.</p>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -79,7 +78,7 @@ const DashboardView: React.FC<DashboardViewProps> = ({ navigateTo, projects, bid
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white p-6 border-b dark:border-gray-700">المشاريع الحديثة</h2>
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white p-6 border-b dark:border-gray-700">المشاريع الحديثة</h2>
             <div className="overflow-x-auto">
                 <table className="w-full text-sm text-right text-gray-500 dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -119,7 +118,7 @@ const DashboardView: React.FC<DashboardViewProps> = ({ navigateTo, projects, bid
             </div>
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white p-6 border-b dark:border-gray-700">آخر الأنشطة</h2>
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white p-6 border-b dark:border-gray-700">آخر الأنشطة</h2>
             <ul className="px-6 divide-y divide-gray-200 dark:divide-gray-700">
                 {activities.slice(0, 5).map(activity => <ActivityItem key={activity.id} activity={activity} />)}
             </ul>

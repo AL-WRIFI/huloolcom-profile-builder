@@ -1,6 +1,7 @@
+
 import React, { useState, useMemo } from 'react';
 import { Project, Task, Educator, SubTask, TaskNote, TaskAttachment, TaskActivityLog, Assignment, AssignmentType, ProjectStatus, AssignmentStatus } from '../types';
-import { ViewType } from '../App';
+import { ViewType } from '../types';
 import { ArrowLeftIcon, BriefcaseIcon, CheckIcon, CheckCircleIcon, ClockIcon, DollarSignIcon, EditIcon, FileTextIcon, PaperclipIcon, PlusIcon, SendIcon, UsersIcon, ZapIcon, ClipboardListIcon, ChatBubbleLeftRightIcon, UploadCloudIcon, TrashIcon, MoreVerticalIcon, CalendarDaysIcon, XCircleIcon, DocumentTextIcon, LinkIcon } from './Icons';
 import ConfirmationModal from './ConfirmationModal';
 import EditTaskModal from './EditTaskModal';
@@ -316,25 +317,26 @@ const TaskDetailView: React.FC<TaskDetailViewProps> = (props) => {
                         </div>
                     )}
 
-                    {activeTab === 'notes' && (
+                     {activeTab === 'notes' && (
                         <div className="space-y-4">
-                            {task.notes.map(note => <NoteItem key={note.id} note={note} />)}
-                            <form onSubmit={handleAddNote} className="flex items-center gap-2 mt-4 p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                                <input type="text" value={newNoteContent} onChange={e => setNewNoteContent(e.target.value)} placeholder="أضف ملاحظة جديدة..." className="w-full bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-md text-sm p-2" />
-                                <button type="submit" className="p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-300" disabled={!newNoteContent.trim()}><SendIcon className="w-5 h-5"/></button>
-                            </form>
+                           {task.notes.map(note => <NoteItem key={note.id} note={note} />)}
+                            <form onSubmit={handleAddNote} className="flex items-start gap-3 mt-4">
+                               <img className="w-10 h-10 rounded-full" src="https://i.pravatar.cc/100?u=admin" alt="Admin"/>
+                               <div className="relative flex-grow">
+                                    <textarea value={newNoteContent} onChange={e => setNewNoteContent(e.target.value)} placeholder="أضف ملاحظة جديدة..." rows={3} className="w-full bg-white border border-gray-300 rounded-lg p-3 text-sm dark:bg-gray-800 dark:border-gray-600 focus:ring-2 focus:ring-blue-500"></textarea>
+                                    <button type="submit" disabled={!newNoteContent.trim()} className="absolute bottom-2 start-2 p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-300"><SendIcon className="w-4 h-4"/></button>
+                               </div>
+                           </form>
                         </div>
                     )}
-                    
+
                     {activeTab === 'activity' && (
-                        <div className="space-y-4">
-                            {task.activityLog.length > 0 ? (
-                                task.activityLog.map(log => <TaskActivityItem key={log.id} log={log} />)
-                            ) : (
-                                <p className="text-center text-sm text-gray-400 py-4">لا توجد أحداث مسجلة لهذه المهمة.</p>
-                            )}
+                         <div className="space-y-4">
+                            {task.activityLog.map(log => <TaskActivityItem key={log.id} log={log}/>)}
+                            {task.activityLog.length === 0 && <p className="text-center text-sm text-gray-400 py-10">لا يوجد نشاط مسجل لهذه المهمة.</p>}
                         </div>
                     )}
+
                 </main>
             </div>
         </div>

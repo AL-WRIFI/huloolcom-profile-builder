@@ -1,7 +1,9 @@
+
+
 import React from 'react';
 import { EducatorApplication, Educator, EducatorStatus } from './types';
 import { EyeIcon } from './components/Icons';
-import { ViewType } from './App';
+import { ViewType } from './types';
 
 interface EducatorApplicationsViewProps {
     applications: EducatorApplication[];
@@ -43,7 +45,7 @@ const EducatorApplicationsView: React.FC<EducatorApplicationsViewProps> = ({ app
     return (
         <div className="animate-fade-in">
             <div className="mb-6">
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">طلبات تسجيل المتخصصين</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">طلبات تسجيل المتخصصين</h1>
                 <p className="text-gray-500 dark:text-gray-400">{pendingApplications.length} طلب جديد بانتظار المراجعة.</p>
             </div>
 

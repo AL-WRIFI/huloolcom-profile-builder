@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { Educator, EducatorStatus } from '../types';
 import { StarIcon, PlusIcon, SearchIcon, ViewGridIcon, ViewListIcon, MoreVerticalIcon } from './Icons';
@@ -110,7 +111,7 @@ const EducatorsView: React.FC<EducatorsViewProps> = ({ educators, onInvite }) =>
         <div className="animate-fade-in">
              <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">المتخصصون المقبولون</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">المتخصصون المقبولون</h1>
                 <p className="text-gray-500 dark:text-gray-400">تصفح، ابحث، وقم بإدارة المتخصصين.</p>
               </div>
                 <div className="flex items-center gap-2">

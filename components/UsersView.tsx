@@ -1,7 +1,7 @@
+
 import React, { useMemo, useState } from 'react';
-import { User, UserStatus, EducationalRequest } from '../types';
-import { ViewType } from '../App';
-import { EyeIcon, TrashIcon, EditIcon, CheckCircleIcon, XCircleIcon, ClockIcon, MoreVerticalIcon, ViewGridIcon, ViewListIcon } from './Icons';
+import { User, UserStatus, EducationalRequest, ViewType } from '../types';
+import { EyeIcon, TrashIcon, EditIcon, MoreVerticalIcon, ViewGridIcon, ViewListIcon } from './Icons';
 import ConfirmationModal from './ConfirmationModal';
 
 interface UsersViewProps {

@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { AppNotification, ToastNotification } from '../types';
-import { ViewType } from '../App';
+import { ViewType } from '../types';
 import { BidsIcon, BookOpenIcon, CheckCircleIcon, ProjectsIcon, ReceiptPercentIcon, UserCheckIcon, UsersIcon, XIcon } from './Icons';
 
 interface NotificationsPanelProps {

@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { DashboardIcon, BookOpenIcon, SettingsIcon, UserCheckIcon, ProjectsIcon, ChevronDownIcon, UserPlusIcon, UserGroupIcon, UserMinusIcon, UsersIcon, ArrowLeftIcon, ArrowRightIcon, AcademicCapIcon, ReceiptPercentIcon, ChartBarIcon, CalendarIcon } from './Icons';
-import { ViewType } from '../App';
+import { ViewType } from '../types';
 
 interface SidebarProps {
   currentView: ViewType;

@@ -1,7 +1,8 @@
 
+
 import React, { useState, useMemo } from 'react';
 import { EducatorApplication, Educator, EducatorStatus, VerifiableDocument, VerificationStatus, Certification, Experience } from './types';
-import { ViewType } from './App';
+import { ViewType } from './types';
 import { ArrowLeftIcon, BriefcaseIcon, CheckCircleIcon, XCircleIcon, ClockIcon, PaperclipIcon, UserCheckIcon, StarIcon, AcademicCapIcon, UserMinusIcon, CheckIcon, TrashIcon, CheckBadgeIcon, PhoneIcon, EnvelopeIcon } from './components/Icons';
 import ConfirmationModal from './components/ConfirmationModal';
 
@@ -113,16 +114,16 @@ const EducatorApplicationDetailView: React.FC<EducatorApplicationDetailViewProps
                     <div className="flex items-center gap-4">
                         <img className="w-20 h-20 rounded-full" src={educator.avatarUrl} alt={educator.name} />
                         <div>
-                            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{educator.name}</h1>
+                            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{educator.name}</h1>
                             <p className="text-blue-500 font-semibold">{educator.discipline}</p>
                             <span className="mt-1 px-2 py-1 inline-flex items-center gap-1.5 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-700 dark:bg-yellow-900/50 dark:text-yellow-300">
                                 <ClockIcon className="w-4 h-4" /> قيد المراجعة
                             </span>
                         </div>
                     </div>
-                    <div className="flex items-center gap-3 flex-shrink-0">
-                        <button onClick={() => handleUpdateStatus(EducatorStatus.REJECTED)} className="px-6 py-2.5 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700">رفض</button>
-                        <button onClick={() => handleUpdateStatus(EducatorStatus.ACTIVE)} className="px-6 py-2.5 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700">قبول</button>
+                    <div className="flex items-center gap-3 flex-shrink-0 w-full sm:w-auto">
+                        <button onClick={() => handleUpdateStatus(EducatorStatus.REJECTED)} className="flex-1 px-6 py-2.5 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700">رفض</button>
+                        <button onClick={() => handleUpdateStatus(EducatorStatus.ACTIVE)} className="flex-1 px-6 py-2.5 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700">قبول</button>
                     </div>
                 </div>
             </div>
@@ -160,8 +161,8 @@ const EducatorApplicationDetailView: React.FC<EducatorApplicationDetailViewProps
                                     <div key={exp.id} className="mb-4 last:mb-0">
                                         <p className="font-semibold">{exp.role} في {exp.company}</p>
                                         <p className="text-xs text-gray-500">{exp.startDate} - {exp.endDate}</p>
-                                        <p className="text-sm my-2 p-2 bg-gray-50 dark:bg-gray-700/50 rounded-md">{exp.description}</p>
-                                         <DocumentReviewCard
+                                        <p className="text-sm text-gray-600 dark:text-gray-300 my-2">{exp.description}</p>
+                                        <DocumentReviewCard
                                             doc={exp.document}
                                             onVerify={() => onUpdateDocumentStatus(application.id, 'experience', exp.id, VerificationStatus.VERIFIED)}
                                             onReject={(reason) => onUpdateDocumentStatus(application.id, 'experience', exp.id, VerificationStatus.REJECTED, reason)}
@@ -171,28 +172,28 @@ const EducatorApplicationDetailView: React.FC<EducatorApplicationDetailViewProps
                             ) : <p className="text-sm text-gray-400">لم يقم المتقدم بإضافة أي خبرات.</p>}
                         </div>
                     </div>
-                </main>
+                 </main>
+
                 {/* Sidebar */}
-                <aside className="lg:w-1/3 w-full space-y-6 flex-shrink-0">
-                     <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-md border dark:border-gray-700 space-y-4">
-                        <h3 className="font-bold text-lg">قائمة التحقق</h3>
+                <aside className="lg:w-1/3 w-full space-y-6">
+                     <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-md border dark:border-gray-700">
+                        <h3 className="font-bold mb-3 text-gray-800 dark:text-white">قائمة التحقق</h3>
                         <ul className="space-y-3">
-                            <VerificationChecklistItem title="التحقق من الهوية" isVerified={isIdVerified} />
-                            <VerificationChecklistItem title="التحقق من الشهادات" isVerified={areCertsVerified} />
-                            <VerificationChecklistItem title="التحقق من الخبرات" isVerified={areExpsVerified} />
+                           <VerificationChecklistItem title="الهوية الشخصية" isVerified={isIdVerified} />
+                           <VerificationChecklistItem title="الشهادات العلمية" isVerified={areCertsVerified} />
+                           <VerificationChecklistItem title="الخبرات العملية" isVerified={areExpsVerified} />
                         </ul>
-                        <div className="pt-3 mt-3 border-t dark:border-gray-700">
-                             <DocumentReviewCard
+                    </div>
+                     <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-md border dark:border-gray-700">
+                        <h3 className="font-bold mb-3 text-gray-800 dark:text-white">المستندات الأساسية</h3>
+                        <div>
+                            <p className="font-semibold text-sm">الهوية الشخصية</p>
+                            <DocumentReviewCard
                                 doc={application.personalId}
                                 onVerify={() => onUpdateDocumentStatus(application.id, 'personalId', application.personalId.id, VerificationStatus.VERIFIED)}
                                 onReject={(reason) => onUpdateDocumentStatus(application.id, 'personalId', application.personalId.id, VerificationStatus.REJECTED, reason)}
                             />
                         </div>
-                    </div>
-                    <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-md border dark:border-gray-700 space-y-3 text-sm">
-                        <h3 className="font-bold text-lg mb-2">معلومات التواصل</h3>
-                         <p className="flex items-center gap-2"><EnvelopeIcon className="w-4 h-4 text-gray-400"/> {educator.email}</p>
-                         <p className="flex items-center gap-2"><PhoneIcon className="w-4 h-4 text-gray-400"/> {educator.phone}</p>
                     </div>
                 </aside>
             </div>

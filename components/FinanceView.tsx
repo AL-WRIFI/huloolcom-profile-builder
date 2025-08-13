@@ -1,6 +1,7 @@
+
 import React, { useMemo, useState } from 'react';
 import { Invoice, InvoiceStatus, User, Project } from '../types';
-import { ViewType } from '../App';
+import { ViewType } from '../types';
 import { PlusIcon, ReceiptPercentIcon } from './Icons';
 
 interface FinanceViewProps {

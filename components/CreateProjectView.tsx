@@ -1,8 +1,7 @@
 
-
 import React, { useState, useEffect } from 'react';
 import { Project, ProjectCreationType, EducationalRequest, User } from '../types';
-import { ViewType } from '../App';
+import { ViewType } from '../types';
 import { FileTextIcon, ProjectsIcon, UserCheckIcon, CheckIcon, ArrowRightIcon, TagIcon, UploadCloudIcon, XCircleIcon, ArrowLeftIcon } from './Icons';
 
 interface CreateProjectViewProps {
@@ -155,14 +154,14 @@ const CreateProjectView: React.FC<CreateProjectViewProps> = ({ navigateTo, onAdd
         <div className="animate-fade-in">
             <div className="mb-6">
                  <button onClick={() => navigateTo('projects')} className="flex items-center text-sm text-blue-600 dark:text-blue-500 hover:underline mb-2"><ArrowLeftIcon className="w-4 h-4 me-1" /> العودة إلى المشاريع</button>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">إنشاء مشروع جديد</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">إنشاء مشروع جديد</h1>
                 <p className="text-gray-500 dark:text-gray-400">اتبع الخطوات لتعريف مشروعك وإطلاقه.</p>
             </div>
 
             <form onSubmit={handleSubmit}>
                 <div className="flex flex-col lg:flex-row gap-8">
                     {/* Main Content */}
-                    <div className="lg:w-2/3 bg-white dark:bg-gray-800 rounded-xl shadow-md border dark:border-gray-700 p-6 lg:p-8 space-y-6">
+                    <div className="lg:w-2/3 bg-white dark:bg-gray-800 rounded-xl shadow-md border dark:border-gray-700 p-4 sm:p-6 lg:p-8 space-y-6">
                         <div>
                             <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">عنوان المشروع</label>
                             <input type="text" id="title" value={title} onChange={e => setTitle(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700/50 dark:border-gray-600" placeholder="مثال: تطوير منهج الفيزياء للصف الثاني الثانوي" required />
@@ -189,7 +188,7 @@ const CreateProjectView: React.FC<CreateProjectViewProps> = ({ navigateTo, onAdd
                     
                     {/* Sidebar */}
                     <div className="lg:w-1/3 space-y-6">
-                        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border dark:border-gray-700 p-6">
+                        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border dark:border-gray-700 p-4 sm:p-6">
                             <h3 className="font-semibold mb-3 text-gray-900 dark:text-white">نوع المشروع</h3>
                             <div className="space-y-3">
                                 {creationTypes.map(item => (
@@ -206,7 +205,7 @@ const CreateProjectView: React.FC<CreateProjectViewProps> = ({ navigateTo, onAdd
                         </div>
 
                         {creationType === ProjectCreationType.FROM_REQUEST && (
-                             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border dark:border-gray-700 p-6 animate-fade-in">
+                             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border dark:border-gray-700 p-4 sm:p-6 animate-fade-in">
                                 <h3 className="font-semibold mb-3 text-gray-900 dark:text-white">الطلب التعليمي المرتبط</h3>
                                 <select 
                                     id="educational-request" 
@@ -224,17 +223,17 @@ const CreateProjectView: React.FC<CreateProjectViewProps> = ({ navigateTo, onAdd
                             </div>
                         )}
                         
-                        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border dark:border-gray-700 p-6">
+                        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border dark:border-gray-700 p-4 sm:p-6">
                              <TagInput tags={tags} setTags={setTags} />
                         </div>
                     </div>
                 </div>
                 
-                <div className="mt-8 flex items-center justify-end gap-4">
-                    <button type="button" onClick={() => navigateTo('projects')} className="px-6 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+                <div className="mt-8 flex flex-col-reverse sm:flex-row items-center justify-end gap-3">
+                    <button type="button" onClick={() => navigateTo('projects')} className="w-full sm:w-auto px-6 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
                         إلغاء
                     </button>
-                    <button type="submit" className="inline-flex items-center px-6 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow-md focus:ring-4 focus:ring-blue-300">
+                    <button type="submit" className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow-md focus:ring-4 focus:ring-blue-300">
                         إنشاء وإعداد سير العمل <ArrowRightIcon className="w-5 h-5 ms-2"/>
                     </button>
                 </div>

@@ -1,9 +1,8 @@
 
-
 import React, { useState, useMemo, Fragment } from 'react';
 import { Project, Bid, BidStatus, Educator, Task, PricedBidTask, Assignment } from '../types';
 import { StarIcon, CheckCircleIcon, XCircleIcon, ClockIcon, LockClosedIcon, LockOpenIcon, UserCheckIcon, CheckIcon, EyeIcon, ChatBubbleLeftRightIcon, PaperclipIcon } from './Icons';
-import { ViewType } from '../App';
+import { ViewType } from '../types';
 import StatusUpdateModal from './StatusUpdateModal';
 import ApprovalMessageModal from './ApprovalMessageModal';
 import AssignmentAgreementModal from './AssignmentAgreementModal';

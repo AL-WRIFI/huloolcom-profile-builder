@@ -1,7 +1,7 @@
 import React from 'react';
 import { EducatorApplication, Educator } from './types';
 import { EyeIcon } from './components/Icons';
-import { ViewType } from './App';
+import { ViewType } from './types';
 
 interface RejectedEducatorsViewProps {
     applications: EducatorApplication[];

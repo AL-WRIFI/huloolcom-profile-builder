@@ -1,5 +1,7 @@
+
+
 import React from 'react';
-import { ViewType } from '../App';
+import { ViewType } from '../types';
 import { DashboardIcon, ProjectsIcon, PlusCircleIcon, UserCheckIcon, MenuAlt4Icon } from './Icons';
 
 interface BottomNavBarProps {
@@ -17,8 +19,8 @@ const NavButton: React.FC<{
 }> = ({ icon, label, isActive, onClick, isMainAction = false }) => {
     if (isMainAction) {
         return (
-            <button onClick={onClick} className="flex flex-col items-center justify-center text-gray-700 dark:text-gray-300 -mt-6">
-                <div className="w-16 h-16 rounded-full bg-blue-600 text-white flex items-center justify-center border-4 border-white dark:border-gray-800 shadow-lg">
+            <button onClick={onClick} className="flex flex-col items-center justify-center text-gray-700 dark:text-gray-300 -mt-5">
+                <div className="w-14 h-14 rounded-full bg-blue-600 text-white flex items-center justify-center border-4 border-white dark:border-gray-800 shadow-lg">
                     {icon}
                 </div>
                 <span className="text-xs font-bold mt-1">{label}</span>
@@ -52,7 +54,7 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({ currentView, navigateTo, on
                     onClick={() => navigateTo('projects')}
                 />
                  <NavButton
-                    icon={<PlusCircleIcon className="w-10 h-10"/>}
+                    icon={<PlusCircleIcon className="w-8 h-8"/>}
                     label="جديد"
                     onClick={() => navigateTo('createProject')}
                     isMainAction

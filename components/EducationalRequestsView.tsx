@@ -1,8 +1,9 @@
 
+
 import React, { useMemo, useState } from 'react';
 import { EducationalRequest, EducationalRequestStatus, Project, PaymentStatus, FulfillmentStatus, User } from '../types';
 import { CheckCircleIcon, XCircleIcon, ClockIcon, EyeIcon, SearchIcon, FilterIcon, ViewGridIcon, ViewListIcon } from './Icons';
-import { ViewType } from '../App';
+import { ViewType } from '../types';
 
 const getStatusChipClass = (status: any) => {
     if (Object.values(EducationalRequestStatus).includes(status)) {
@@ -147,7 +148,7 @@ const EducationalRequestsView: React.FC<EducationalRequestsViewProps> = ({ reque
             <div className="animate-fade-in">
                 <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">الطلبات الأكاديمية</h1>
+                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">الطلبات الأكاديمية</h1>
                         <p className="text-gray-500 dark:text-gray-400">{filteredRequests.length} طلب مطابق للمعايير.</p>
                     </div>
                      <div className="bg-gray-200 dark:bg-gray-700 p-1 rounded-lg">

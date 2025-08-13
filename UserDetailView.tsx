@@ -1,7 +1,6 @@
-
 import React, { useMemo, useState } from 'react';
 import { User, UserStatus, EducationalRequest, Project, ProjectStatus } from './types';
-import { ViewType } from './App';
+import { ViewType } from './types';
 import { ArrowLeftIcon, BriefcaseIcon, CheckCircleIcon, ClockIcon, CreditCardIcon, DollarSignIcon, EditIcon, EnvelopeIcon, MapPinIcon, PhoneIcon, TrashIcon, TrendingUpIcon, BookOpenIcon } from './components/Icons';
 import ConfirmationModal from './components/ConfirmationModal';
 

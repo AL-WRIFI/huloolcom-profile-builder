@@ -1,5 +1,7 @@
+
+
 import React from 'react';
-import { ViewType } from '../App';
+import { ViewType } from '../types';
 import { BellIcon } from './Icons';
 
 interface HeaderProps {
@@ -33,7 +35,7 @@ const viewTitles: Record<ViewType, string> = {
 const Header: React.FC<HeaderProps> = ({ currentView, unreadCount, onNotificationClick }) => {
     return (
         <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-b dark:border-gray-700 p-4 flex items-center justify-between sticky top-0 z-20">
-            <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-lg font-bold sm:text-xl text-gray-900 dark:text-white">
                 {viewTitles[currentView] || 'حلولكم'}
             </h1>
             <div className="flex items-center gap-4">

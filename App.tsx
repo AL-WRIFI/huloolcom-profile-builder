@@ -14,7 +14,7 @@ import RequestDetailView from './components/RequestDetailView';
 import BidDetailView from './components/BidDetailView';
 import TaskDetailView from './components/TaskDetailView';
 import { PROJECTS, BIDS, EDUCATORS, ACTIVITIES, EDUCATIONAL_REQUESTS, EDUCATOR_APPLICATIONS, USERS, INVOICES, NOTIFICATIONS } from './constants';
-import { Project, Bid, Task, BidStatus, ProjectStatus, ToastNotification, EducationalRequest, Assignment, ProjectCreationType, EducationalRequestStatus, AssignmentStatus, AssignmentType, RequestActivityLog, RequestActivityType, PaymentStatus, FulfillmentStatus, SubTask, TaskNote, ProjectActivityLog, Educator, EducatorApplication, EducatorStatus, VerificationStatus, User, UserStatus, Invoice, AppNotification } from './types';
+import { Project, Bid, Task, BidStatus, ProjectStatus, ToastNotification, EducationalRequest, Assignment, ProjectCreationType, EducationalRequestStatus, AssignmentStatus, AssignmentType, RequestActivityLog, RequestActivityType, PaymentStatus, FulfillmentStatus, SubTask, TaskNote, ProjectActivityLog, Educator, EducatorApplication, EducatorStatus, VerificationStatus, User, UserStatus, Invoice, AppNotification, ViewType } from './types';
 import EducatorApplicationsView from './EducatorApplicationsView';
 import EducatorApplicationDetailView from './EducatorApplicationDetailView';
 import RejectedEducatorsView from './RejectedEducatorsView';
@@ -27,18 +27,6 @@ import NotificationsPanel from './components/NotificationsPanel';
 import FinanceView from './components/FinanceView';
 import ReportsView from './components/ReportsView';
 import CalendarView from './components/CalendarView';
-
-export type ViewType = 
-  'dashboard' | 
-  'projects' | 'projectDetail' | 'createProject' | 
-  'educators' | 'educatorApplications' | 'educatorApplicationDetail' | 'rejectedEducators' |
-  'users' | 'userDetail' |
-  'educationalRequests' | 'requestDetail' |
-  'bidDetail' | 'taskDetail' | 
-  'finance' | 'invoiceDetail' |
-  'reports' |
-  'calendar' |
-  'settings';
 
 const getInitialState = <T,>(key: string, defaultValue: T): T => {
     try {

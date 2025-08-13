@@ -1,8 +1,9 @@
+
 import React, { useState, useMemo } from 'react';
 import { Project, Task, ProjectStatus, Educator, Assignment, AssignmentType, AssignmentStatus, ProjectCreationType, Bid, EducationalRequest, User } from '../types';
 import { ClockIcon, CheckCircleIcon, PlusIcon, EditIcon, DollarSignIcon, EducatorsIcon, TrashIcon, BidsIcon, ArrowLeftIcon, UsersIcon, BriefcaseIcon, LinkIcon, BookOpenIcon, TrendingUpIcon, MoreVerticalIcon, LockClosedIcon, LockOpenIcon, PaperclipIcon, CheckIcon } from './Icons';
 import AddTaskModal from './AddTaskModal';
-import { ViewType } from '../App';
+import { ViewType } from '../types';
 import EditProjectDetailsModal from './EditProjectDetailsModal';
 import AssignProviderModal from './AssignProviderModal';
 import { BidsView } from './BidsView';
@@ -116,7 +117,7 @@ const TaskCard: React.FC<{
                     <div className="flex justify-between items-start gap-2">
                         <div>
                             <h4 className="font-bold text-lg text-gray-900 dark:text-white">{task.title}</h4>
-                            <div className="flex items-center gap-2 mt-1">
+                            <div className="flex items-center gap-2 mt-1 flex-wrap">
                                 <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${getStatusInfo(task.status).color}`}>{getStatusInfo(task.status).text}</span>
                                 <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${getBiddingStatusInfo(task).color}`}>{getBiddingStatusInfo(task).text}</span>
                             </div>
@@ -317,7 +318,7 @@ const ProjectDetailView: React.FC<ProjectDetailViewProps> = (props) => {
       <div className="animate-fade-in">
           <div className="mb-6">
               <button onClick={() => navigateTo('projects')} className="flex items-center text-sm text-blue-600 dark:text-blue-500 hover:underline mb-2"><ArrowLeftIcon className="w-4 h-4 me-1"/> العودة إلى المشاريع</button>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{project.title}</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">{project.title}</h1>
           </div>
 
         <div className="flex flex-col lg:flex-row-reverse gap-8">
@@ -334,9 +335,9 @@ const ProjectDetailView: React.FC<ProjectDetailViewProps> = (props) => {
 
                 <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-md border dark:border-gray-700 space-y-4">
                     <h3 className="font-bold text-lg">إدارة المشروع</h3>
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
                          <span className="text-sm font-semibold text-gray-600 dark:text-gray-300">الحالة</span>
-                         <div className="flex gap-1">
+                         <div className="flex flex-wrap gap-1 justify-end">
                             {Object.values(ProjectStatus).map(s => (
                                 <button key={s} onClick={() => s !== project.status && handleStatusChangeRequest(s)} className={`px-2 py-1 text-xs font-bold rounded-md ${project.status === s ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'}`}>{s}</button>
                             ))}
@@ -395,11 +396,11 @@ const ProjectDetailView: React.FC<ProjectDetailViewProps> = (props) => {
                     {activeTab === 'overview' && (
                         <div className="space-y-6">
                             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border dark:border-gray-700">
-                               <h3 className="font-bold mb-3 flex items-center text-lg"><BookOpenIcon className="w-5 h-5 me-2 text-gray-400"/>وصف المشروع</h3>
+                               <h3 className="font-bold mb-3 flex items-center text-lg sm:text-xl"><BookOpenIcon className="w-5 h-5 me-2 text-gray-400"/>وصف المشروع</h3>
                                <p className="text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-line">{project.description}</p>
                            </div>
                             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border dark:border-gray-700">
-                               <h3 className="font-bold mb-3 flex items-center text-lg"><DollarSignIcon className="w-5 h-5 me-2 text-gray-400"/>التقرير المالي</h3>
+                               <h3 className="font-bold mb-3 flex items-center text-lg sm:text-xl"><DollarSignIcon className="w-5 h-5 me-2 text-gray-400"/>التقرير المالي</h3>
                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                    <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                                        <p className="text-sm text-gray-500">الميزانية المخصصة</p>
@@ -444,7 +445,7 @@ const ProjectDetailView: React.FC<ProjectDetailViewProps> = (props) => {
                     )}
                     {activeTab === 'activity' && (
                          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border dark:border-gray-700">
-                             <h3 className="font-bold mb-4 flex items-center text-lg"><ClockIcon className="w-5 h-5 me-2 text-gray-400"/>سجل أحداث المشروع</h3>
+                             <h3 className="font-bold mb-4 flex items-center text-lg sm:text-xl"><ClockIcon className="w-5 h-5 me-2 text-gray-400"/>سجل أحداث المشروع</h3>
                              <ul className="space-y-4">
                                 {project.activityLog.map(log => (
                                     <li key={log.id} className="flex items-start gap-3">

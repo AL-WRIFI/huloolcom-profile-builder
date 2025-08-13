@@ -1,6 +1,7 @@
+
 import React, { useState, useMemo } from 'react';
 import { Project } from '../types';
-import { ViewType } from '../App';
+import { ViewType } from '../types';
 import { ArrowLeftIcon, ArrowRightIcon } from './Icons';
 
 interface CalendarViewProps {
