@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAppStore } from '../../stores/app-store';
-import { ViewType } from '../../types';
+import { ViewType } from '../../types/common';
 import { cn } from '../../lib/utils';
 
 const viewTitles: Record<ViewType, string> = {
@@ -8,6 +8,7 @@ const viewTitles: Record<ViewType, string> = {
   projects: 'المشاريع',
   projectDetail: 'تفاصيل المشروع',
   createProject: 'إنشاء مشروع جديد',
+  bids: 'العروض',
   educators: 'المتخصصون',
   educatorApplications: 'طلبات التسجيل',
   educatorApplicationDetail: 'تفاصيل طلب التسجيل',

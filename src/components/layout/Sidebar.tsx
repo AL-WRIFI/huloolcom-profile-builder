@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAppStore } from '../../stores/app-store';
-import { ViewType } from '../../types';
+import { ViewType } from '../../types/common';
 import { cn } from '../../lib/utils';
 
 interface SidebarItem {

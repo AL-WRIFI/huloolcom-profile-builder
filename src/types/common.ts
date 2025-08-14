@@ -1,6 +1,6 @@
 export type ViewType = 
   'dashboard' | 
-  'projects' | 'projectDetail' | 'createProject' | 
+  'projects' | 'projectDetail' | 'createProject' | 'bids' |
   'educators' | 'educatorApplications' | 'educatorApplicationDetail' | 'rejectedEducators' |
   'users' | 'userDetail' |
   'educationalRequests' | 'requestDetail' |
