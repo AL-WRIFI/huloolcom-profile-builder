@@ -1,6 +1,7 @@
 
 import React, { useMemo, useState } from 'react';
-import { User, UserStatus, EducationalRequest, ViewType } from './types';
+import { User, UserStatus, EducationalRequest } from './types';
+import { ViewType } from './App';
 import { EyeIcon, TrashIcon, EditIcon, CheckCircleIcon, XCircleIcon, ClockIcon } from './components/Icons';
 import ConfirmationModal from './components/ConfirmationModal';
 
